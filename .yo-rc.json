@@ -1,0 +1,33 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "taller",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientTestFrameworks": [],
+    "clientTheme": "none",
+    "creationTimestamp": 1773867124659,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "feignClient": null,
+    "jhipsterVersion": "9.0.0",
+    "jwtSecretKey": "NGFmMmIxYmY5MjM5MjQ5ZjE4MDU3YWZjY2NkZDI2NDVhMWI0ZTE0NTEzNTQ4NDAyMDU1NTQxYWM4ZDEyZTA2NDcyNmQ3Y2NlMWVjZmEwOThiYmQyMDA1YzlkNDliYjk2YzRlZWQxYTU0MzNhN2JhNWI2NWI0OGYzZGZmZDM5OWQ=",
+    "languages": ["en", "es"],
+    "microfrontend": null,
+    "microfrontends": [],
+    "nativeLanguage": "en",
+    "packageName": "com.taller.app",
+    "prodDatabaseType": "mysql",
+    "reactive": false,
+    "serverPort": null,
+    "serviceDiscoveryType": null,
+    "syncUserWithIdp": null,
+    "testFrameworks": [],
+    "withAdminUi": true
+  }
+}
