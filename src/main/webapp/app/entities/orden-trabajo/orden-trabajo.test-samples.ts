@@ -4,13 +4,13 @@ import { IOrdenTrabajo, NewOrdenTrabajo } from './orden-trabajo.model';
 
 export const sampleWithRequiredData: IOrdenTrabajo = {
   id: 5347,
-  fecha: dayjs('2026-03-19'),
+  fecha: dayjs('2026-03-20'),
   estado: 'EN_PROCESO',
 };
 
 export const sampleWithPartialData: IOrdenTrabajo = {
   id: 31006,
-  fecha: dayjs('2026-03-19'),
+  fecha: dayjs('2026-03-20'),
   estado: 'EN_PROCESO',
   manoObra: 16787.93,
   subtotal: 24300.68,
@@ -19,7 +19,7 @@ export const sampleWithPartialData: IOrdenTrabajo = {
 
 export const sampleWithFullData: IOrdenTrabajo = {
   id: 11309,
-  fecha: dayjs('2026-03-19'),
+  fecha: dayjs('2026-03-20'),
   estado: 'FINALIZADO',
   observaciones: 'inasmuch who',
   mecanico: 'place boo',

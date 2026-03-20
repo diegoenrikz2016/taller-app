@@ -10,15 +10,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A OrdenTrabajo.
  */
 @Entity
 @Table(name = "orden_trabajo")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class OrdenTrabajo implements Serializable {
 
@@ -55,7 +52,6 @@ public class OrdenTrabajo implements Serializable {
     private BigDecimal total;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ordenTrabajo")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "ordenTrabajo" }, allowSetters = true)
     private Set<DetalleOrden> detalleses = new HashSet<>();
 

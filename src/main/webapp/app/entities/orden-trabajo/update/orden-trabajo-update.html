@@ -106,7 +106,7 @@
           >
             <option [ngValue]="null"></option>
             @for (vehiculoOption of vehiculosSharedCollection(); track $index) {
-              <option [ngValue]="vehiculoOption">{{ vehiculoOption.id }}</option>
+              <option [ngValue]="vehiculoOption">{{ vehiculoOption.placa }}</option>
             }
           </select>
         </div>

@@ -6,15 +6,12 @@ import jakarta.validation.constraints.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A DetalleOrden.
  */
 @Entity
 @Table(name = "detalle_orden")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class DetalleOrden implements Serializable {
 

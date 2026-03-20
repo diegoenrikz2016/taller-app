@@ -8,7 +8,7 @@
     <!--
         Added the constraints for entity OrdenTrabajo.
     -->
-    <changeSet id="20260320015902-2" author="jhipster">
+    <changeSet id="20260320201229-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="vehiculo_id"
                                  baseTableName="orden_trabajo"

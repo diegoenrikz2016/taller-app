@@ -27,11 +27,6 @@ const routes: Routes = [
     loadChildren: () => import('./orden-trabajo/orden-trabajo.routes'),
   },
   {
-    path: 'servicio',
-    data: { pageTitle: 'tallerApp.servicio.home.title' },
-    loadChildren: () => import('./servicio/servicio.routes'),
-  },
-  {
     path: 'detalle-orden',
     data: { pageTitle: 'tallerApp.detalleOrden.home.title' },
     loadChildren: () => import('./detalle-orden/detalle-orden.routes'),

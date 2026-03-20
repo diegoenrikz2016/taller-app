@@ -7,26 +7,23 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <!--
-        Added the entity Vehiculo.
+        Added the entity DetalleOrden.
     -->
-    <changeSet id="20260320015901-1" author="jhipster">
-        <createTable tableName="vehiculo">
+    <changeSet id="20260320201230-1" author="jhipster">
+        <createTable tableName="detalle_orden">
             <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="placa" type="varchar(255)">
+            <column name="descripcion" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="marca" type="varchar(255)">
-                <constraints nullable="true" />
+            <column name="cantidad" type="integer">
+                <constraints nullable="false" />
             </column>
-            <column name="modelo" type="varchar(255)">
-                <constraints nullable="true" />
+            <column name="precio" type="decimal(21,2)">
+                <constraints nullable="false" />
             </column>
-            <column name="color" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="cliente_id" type="bigint">
+            <column name="orden_trabajo_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -43,17 +40,16 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20260320015901-1-data" author="jhipster" context="faker">
+    <changeSet id="20260320201230-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/vehiculo.csv"
+                  file="config/liquibase/fake-data/detalle_orden.csv"
                   separator=";"
-                  tableName="vehiculo"
+                  tableName="detalle_orden"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="placa" type="string"/>
-            <column name="marca" type="string"/>
-            <column name="modelo" type="string"/>
-            <column name="color" type="string"/>
+            <column name="descripcion" type="string"/>
+            <column name="cantidad" type="numeric"/>
+            <column name="precio" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

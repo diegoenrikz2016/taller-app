@@ -4,15 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serial;
 import java.io.Serializable;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Vehiculo.
  */
 @Entity
 @Table(name = "vehiculo")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Vehiculo implements Serializable {
 
