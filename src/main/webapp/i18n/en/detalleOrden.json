@@ -1,0 +1,27 @@
+{
+  "tallerApp": {
+    "detalleOrden": {
+      "home": {
+        "title": "Detalle Ordens",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Detalle Orden",
+        "createOrEditLabel": "Create or edit a Detalle Orden",
+        "notFound": "No Detalle Ordens found"
+      },
+      "created": "A new Detalle Orden is created with identifier {{ param }}",
+      "updated": "A Detalle Orden is updated with identifier {{ param }}",
+      "deleted": "A Detalle Orden is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Detalle Orden {{ id }}?"
+      },
+      "detail": {
+        "title": "Detalle Orden"
+      },
+      "id": "ID",
+      "descripcion": "Descripcion",
+      "cantidad": "Cantidad",
+      "precio": "Precio",
+      "ordenTrabajo": "Orden Trabajo"
+    }
+  }
+}

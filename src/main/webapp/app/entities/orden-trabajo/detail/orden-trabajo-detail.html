@@ -1,0 +1,68 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (ordenTrabajo(); as ordenTrabajoRef) {
+      <div>
+        <h2 data-cy="ordenTrabajoDetailsHeading"><span jhiTranslate="tallerApp.ordenTrabajo.detail.title">Orden Trabajo</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ ordenTrabajoRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.ordenTrabajo.fecha">Fecha</span></dt>
+          <dd>
+            <span>{{ ordenTrabajoRef.fecha | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.ordenTrabajo.estado">Estado</span></dt>
+          <dd>
+            <span [jhiTranslate]="'tallerApp.EstadoOrden.' + (ordenTrabajoRef.estado ?? 'null')">{{
+              { null: '', PENDIENTE: 'PENDIENTE', EN_PROCESO: 'EN_PROCESO', FINALIZADO: 'FINALIZADO' }[ordenTrabajoRef.estado ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.ordenTrabajo.observaciones">Observaciones</span></dt>
+          <dd>
+            <span>{{ ordenTrabajoRef.observaciones }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.ordenTrabajo.mecanico">Mecanico</span></dt>
+          <dd>
+            <span>{{ ordenTrabajoRef.mecanico }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.ordenTrabajo.manoObra">Mano Obra</span></dt>
+          <dd>
+            <span>{{ ordenTrabajoRef.manoObra }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.ordenTrabajo.subtotal">Subtotal</span></dt>
+          <dd>
+            <span>{{ ordenTrabajoRef.subtotal }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.ordenTrabajo.total">Total</span></dt>
+          <dd>
+            <span>{{ ordenTrabajoRef.total }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.ordenTrabajo.vehiculo">Vehiculo</span></dt>
+          <dd>
+            @if (ordenTrabajo()!.vehiculo) {
+              <div>
+                <a [routerLink]="['/vehiculo', ordenTrabajo()!.vehiculo?.id, 'view']">{{ ordenTrabajoRef.vehiculo?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/orden-trabajo', ordenTrabajoRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

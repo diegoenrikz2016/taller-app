@@ -1,0 +1,58 @@
+{
+  "annotations": {
+    "changelogDate": "20260320015902"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "fecha",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "EstadoOrden",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PENDIENTE,EN_PROCESO,FINALIZADO"
+    },
+    {
+      "fieldName": "observaciones",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mecanico",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "manoObra",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "subtotal",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "total",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "name": "OrdenTrabajo",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "detalleOrden",
+      "relationshipName": "detalles",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "vehiculo",
+      "relationshipName": "vehiculo",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

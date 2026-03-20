@@ -1,0 +1,48 @@
+entity Cliente {
+  nombre String required
+  cedula String
+  telefono String
+  direccion String
+}
+
+entity Vehiculo {
+  placa String required
+  marca String
+  modelo String
+  color String
+}
+
+entity OrdenTrabajo {
+  fecha LocalDate required
+  estado EstadoOrden required
+  observaciones String
+  mecanico String
+  manoObra BigDecimal
+  subtotal BigDecimal
+  total BigDecimal
+}
+
+entity DetalleOrden {
+  descripcion String required
+  cantidad Integer required
+  precio BigDecimal required
+}
+
+enum EstadoOrden {
+  PENDIENTE,
+  EN_PROCESO,
+  FINALIZADO
+}
+
+relationship ManyToOne {
+  Vehiculo{cliente} to Cliente
+  OrdenTrabajo{vehiculo} to Vehiculo
+}
+
+relationship OneToMany {
+  OrdenTrabajo{detalles} to DetalleOrden
+}
+
+dto * with mapstruct
+service * with serviceClass
+paginate * with pagination

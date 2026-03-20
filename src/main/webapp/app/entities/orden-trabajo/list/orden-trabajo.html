@@ -1,0 +1,168 @@
+<div>
+  <h2 id="page-heading" data-cy="OrdenTrabajoHeading">
+    <span jhiTranslate="tallerApp.ordenTrabajo.home.title">Orden Trabajos</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
+        <span jhiTranslate="tallerApp.ordenTrabajo.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-orden-trabajo"
+        [routerLink]="['/orden-trabajo/new']"
+      >
+        <fa-icon icon="plus" />
+        <span jhiTranslate="tallerApp.ordenTrabajo.home.createLabel">Create a new Orden Trabajo</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  @if (ordenTrabajos().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="tallerApp.ordenTrabajo.home.notFound">No Orden Trabajos found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fecha">
+              <div class="d-flex">
+                <span jhiTranslate="tallerApp.ordenTrabajo.fecha">Fecha</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="estado">
+              <div class="d-flex">
+                <span jhiTranslate="tallerApp.ordenTrabajo.estado">Estado</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="observaciones">
+              <div class="d-flex">
+                <span jhiTranslate="tallerApp.ordenTrabajo.observaciones">Observaciones</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="mecanico">
+              <div class="d-flex">
+                <span jhiTranslate="tallerApp.ordenTrabajo.mecanico">Mecanico</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="manoObra">
+              <div class="d-flex">
+                <span jhiTranslate="tallerApp.ordenTrabajo.manoObra">Mano Obra</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="subtotal">
+              <div class="d-flex">
+                <span jhiTranslate="tallerApp.ordenTrabajo.subtotal">Subtotal</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="total">
+              <div class="d-flex">
+                <span jhiTranslate="tallerApp.ordenTrabajo.total">Total</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vehiculo.id">
+              <div class="d-flex">
+                <span jhiTranslate="tallerApp.ordenTrabajo.vehiculo">Vehiculo</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (ordenTrabajo of ordenTrabajos(); track trackId(ordenTrabajo)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/orden-trabajo', ordenTrabajo.id, 'view']">{{ ordenTrabajo.id }}</a>
+              </td>
+              <td>{{ ordenTrabajo.fecha | formatMediumDate }}</td>
+              <td [jhiTranslate]="'tallerApp.EstadoOrden.' + (ordenTrabajo.estado ?? 'null')">
+                {{
+                  { null: '', PENDIENTE: 'PENDIENTE', EN_PROCESO: 'EN_PROCESO', FINALIZADO: 'FINALIZADO' }[ordenTrabajo.estado ?? 'null']
+                }}
+              </td>
+              <td>{{ ordenTrabajo.observaciones }}</td>
+              <td>{{ ordenTrabajo.mecanico }}</td>
+              <td>{{ ordenTrabajo.manoObra }}</td>
+              <td>{{ ordenTrabajo.subtotal }}</td>
+              <td>{{ ordenTrabajo.total }}</td>
+              <td>
+                @if (ordenTrabajo.vehiculo) {
+                  <div>
+                    <a [routerLink]="['/vehiculo', ordenTrabajo.vehiculo.id, 'view']">{{ ordenTrabajo.vehiculo.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/orden-trabajo', ordenTrabajo.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/orden-trabajo', ordenTrabajo.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(ordenTrabajo)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (ordenTrabajos().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems()"
+          [page]="page()"
+          [pageSize]="itemsPerPage()"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        />
+      </div>
+    </div>
+  }
+</div>

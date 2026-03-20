@@ -1,0 +1,132 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-orden-trabajo-heading"
+        data-cy="OrdenTrabajoCreateUpdateHeading"
+        jhiTranslate="tallerApp.ordenTrabajo.home.createOrEditLabel"
+      >
+        Create or edit a Orden Trabajo
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="global.field.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let fechaRef = editForm.get('fecha')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_fecha" jhiTranslate="tallerApp.ordenTrabajo.fecha">Fecha</label>
+          <div class="input-group">
+            <input
+              id="field_fecha"
+              data-cy="fecha"
+              type="text"
+              class="form-control"
+              name="fecha"
+              ngbDatepicker
+              #fechaDp="ngbDatepicker"
+              formControlName="fecha"
+            />
+            <button type="button" class="btn btn-secondary" (click)="fechaDp.toggle()"><fa-icon icon="calendar-alt" /></button>
+          </div>
+          @if (fechaRef.invalid && (fechaRef.dirty || fechaRef.touched)) {
+            <div>
+              @if (editForm.get('fecha')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let estadoRef = editForm.get('estado')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_estado" jhiTranslate="tallerApp.ordenTrabajo.estado">Estado</label>
+          <select class="form-control" name="estado" formControlName="estado" id="field_estado" data-cy="estado">
+            <option [ngValue]="null">{{ 'tallerApp.EstadoOrden.null' | translate }}</option>
+            @for (estadoOrden of estadoOrdenValues; track $index) {
+              <option [value]="estadoOrden">{{ 'tallerApp.EstadoOrden.' + estadoOrden | translate }}</option>
+            }
+          </select>
+          @if (estadoRef.invalid && (estadoRef.dirty || estadoRef.touched)) {
+            <div>
+              @if (editForm.get('estado')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_observaciones" jhiTranslate="tallerApp.ordenTrabajo.observaciones">Observaciones</label>
+          <input
+            type="text"
+            class="form-control"
+            name="observaciones"
+            id="field_observaciones"
+            data-cy="observaciones"
+            formControlName="observaciones"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_mecanico" jhiTranslate="tallerApp.ordenTrabajo.mecanico">Mecanico</label>
+          <input type="text" class="form-control" name="mecanico" id="field_mecanico" data-cy="mecanico" formControlName="mecanico" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_manoObra" jhiTranslate="tallerApp.ordenTrabajo.manoObra">Mano Obra</label>
+          <input type="number" class="form-control" name="manoObra" id="field_manoObra" data-cy="manoObra" formControlName="manoObra" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_subtotal" jhiTranslate="tallerApp.ordenTrabajo.subtotal">Subtotal</label>
+          <input type="number" class="form-control" name="subtotal" id="field_subtotal" data-cy="subtotal" formControlName="subtotal" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_total" jhiTranslate="tallerApp.ordenTrabajo.total">Total</label>
+          <input type="number" class="form-control" name="total" id="field_total" data-cy="total" formControlName="total" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_vehiculo" jhiTranslate="tallerApp.ordenTrabajo.vehiculo">Vehiculo</label>
+          <select
+            class="form-control"
+            id="field_vehiculo"
+            data-cy="vehiculo"
+            name="vehiculo"
+            formControlName="vehiculo"
+            [compareWith]="compareVehiculo"
+          >
+            <option [ngValue]="null"></option>
+            @for (vehiculoOption of vehiculosSharedCollection(); track $index) {
+              <option [ngValue]="vehiculoOption">{{ vehiculoOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban" />&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving()"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save" />&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

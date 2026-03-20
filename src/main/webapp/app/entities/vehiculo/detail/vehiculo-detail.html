@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (vehiculo(); as vehiculoRef) {
+      <div>
+        <h2 data-cy="vehiculoDetailsHeading"><span jhiTranslate="tallerApp.vehiculo.detail.title">Vehiculo</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ vehiculoRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.vehiculo.placa">Placa</span></dt>
+          <dd>
+            <span>{{ vehiculoRef.placa }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.vehiculo.marca">Marca</span></dt>
+          <dd>
+            <span>{{ vehiculoRef.marca }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.vehiculo.modelo">Modelo</span></dt>
+          <dd>
+            <span>{{ vehiculoRef.modelo }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.vehiculo.color">Color</span></dt>
+          <dd>
+            <span>{{ vehiculoRef.color }}</span>
+          </dd>
+          <dt><span jhiTranslate="tallerApp.vehiculo.cliente">Cliente</span></dt>
+          <dd>
+            @if (vehiculo()!.cliente) {
+              <div>
+                <a [routerLink]="['/cliente', vehiculo()!.cliente?.id, 'view']">{{ vehiculoRef.cliente?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/vehiculo', vehiculoRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

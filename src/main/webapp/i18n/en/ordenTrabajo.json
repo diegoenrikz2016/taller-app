@@ -1,0 +1,32 @@
+{
+  "tallerApp": {
+    "ordenTrabajo": {
+      "home": {
+        "title": "Orden Trabajos",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Orden Trabajo",
+        "createOrEditLabel": "Create or edit a Orden Trabajo",
+        "notFound": "No Orden Trabajos found"
+      },
+      "created": "A new Orden Trabajo is created with identifier {{ param }}",
+      "updated": "A Orden Trabajo is updated with identifier {{ param }}",
+      "deleted": "A Orden Trabajo is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Orden Trabajo {{ id }}?"
+      },
+      "detail": {
+        "title": "Orden Trabajo"
+      },
+      "id": "ID",
+      "fecha": "Fecha",
+      "estado": "Estado",
+      "observaciones": "Observaciones",
+      "mecanico": "Mecanico",
+      "manoObra": "Mano Obra",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "detalles": "Detalles",
+      "vehiculo": "Vehiculo"
+    }
+  }
+}
