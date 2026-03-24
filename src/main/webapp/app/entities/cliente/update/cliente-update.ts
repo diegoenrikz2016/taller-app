@@ -14,10 +14,13 @@ import { ClienteService } from '../service/cliente.service';
 
 import { ClienteFormGroup, ClienteFormService } from './cliente-form.service';
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 @Component({
   selector: 'jhi-cliente-update',
   templateUrl: './cliente-update.html',
-  imports: [TranslateDirective, TranslateModule, FontAwesomeModule, AlertError, ReactiveFormsModule],
+  imports: [TranslateDirective, TranslateModule, FontAwesomeModule, AlertError, ReactiveFormsModule, MatFormFieldModule, MatInputModule],
 })
 export class ClienteUpdate implements OnInit {
   readonly isSaving = signal(false);

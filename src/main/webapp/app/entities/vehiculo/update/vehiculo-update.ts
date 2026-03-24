@@ -17,10 +17,12 @@ import { IVehiculo } from '../vehiculo.model';
 
 import { VehiculoFormGroup, VehiculoFormService } from './vehiculo-form.service';
 
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 @Component({
   selector: 'jhi-vehiculo-update',
   templateUrl: './vehiculo-update.html',
-  imports: [TranslateDirective, TranslateModule, FontAwesomeModule, AlertError, ReactiveFormsModule],
+  imports: [TranslateDirective, TranslateModule, FontAwesomeModule, AlertError, ReactiveFormsModule, MatAutocompleteModule],
 })
 export class VehiculoUpdate implements OnInit {
   readonly isSaving = signal(false);
@@ -97,5 +99,9 @@ export class VehiculoUpdate implements OnInit {
       .pipe(map((res: HttpResponse<ICliente[]>) => res.body ?? []))
       .pipe(map((clientes: ICliente[]) => this.clienteService.addClienteToCollectionIfMissing<ICliente>(clientes, this.vehiculo?.cliente)))
       .subscribe((clientes: ICliente[]) => this.clientesSharedCollection.set(clientes));
+  }
+
+  displayCliente(cliente: any): string {
+    return cliente ? cliente.nombre : '';
   }
 }

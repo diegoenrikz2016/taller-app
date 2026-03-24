@@ -43,7 +43,7 @@
           <input type="text" class="form-control" name="color" id="field_color" data-cy="color" formControlName="color" />
         </div>
 
-        <div class="mb-3">
+        <!--div class="mb-3">
           <label class="form-label" for="field_cliente" jhiTranslate="tallerApp.vehiculo.cliente">Cliente</label>
           <select
             class="form-control"
@@ -58,7 +58,20 @@
               <option [ngValue]="clienteOption">{{ clienteOption.nombre }}</option>
             }
           </select>
-        </div>
+        </div-->
+
+        <mat-form-field style="width: 100%">
+          <mat-label>Cliente</mat-label>
+          <input type="text" matInput [formControl]="editForm.get('cliente')" [matAutocomplete]="auto" />
+
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCliente">
+            @for (cliente of clientesSharedCollection(); track $index) {
+              <mat-option [value]="cliente">
+                {{ cliente.nombre }}
+              </mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
       </div>
 
       <div>
