@@ -88,7 +88,9 @@ export class ClienteService extends ClientesService {
     return clienteCollection;
   }
 
-  search(query: string) {
-    return this.http.get<ICliente[]>(`api/clientes/search?query=${query}`);
+  search(query: string): Observable<ICliente[]> {
+    return this.http.get<ICliente[]>(`${this.resourceUrl}/search`, {
+      params: { query },
+    });
   }
 }

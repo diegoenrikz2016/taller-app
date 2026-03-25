@@ -167,7 +167,7 @@ public class ClienteResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
      *         the clienteDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[0-9]+}")
     public ResponseEntity<ClienteDTO> getCliente(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Cliente : {}", id);
         Optional<ClienteDTO> clienteDTO = clienteService.findOne(id);
@@ -190,7 +190,8 @@ public class ClienteResource {
     }
 
     @GetMapping("/clientes/search")
-    public List<ClienteDTO> searchClientes(@RequestParam String query) {
-        return clienteService.search(query);
+    public ResponseEntity<List<ClienteDTO>> searchClientes(@RequestParam String query) {
+        List<ClienteDTO> result = clienteService.search(query);
+        return ResponseEntity.ok().body(result);
     }
 }
