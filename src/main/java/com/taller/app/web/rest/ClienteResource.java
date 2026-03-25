@@ -51,7 +51,9 @@ public class ClienteResource {
      * {@code POST  /clientes} : Create a new cliente.
      *
      * @param clienteDTO the clienteDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new clienteDTO, or with status {@code 400 (Bad Request)} if the cliente has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new clienteDTO, or with status {@code 400 (Bad Request)} if
+     *         the cliente has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -69,11 +71,14 @@ public class ClienteResource {
     /**
      * {@code PUT  /clientes/:id} : Updates an existing cliente.
      *
-     * @param id the id of the clienteDTO to save.
+     * @param id         the id of the clienteDTO to save.
      * @param clienteDTO the clienteDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated clienteDTO,
-     * or with status {@code 400 (Bad Request)} if the clienteDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the clienteDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated clienteDTO,
+     *         or with status {@code 400 (Bad Request)} if the clienteDTO is not
+     *         valid,
+     *         or with status {@code 500 (Internal Server Error)} if the clienteDTO
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
@@ -100,14 +105,19 @@ public class ClienteResource {
     }
 
     /**
-     * {@code PATCH  /clientes/:id} : Partial updates given fields of an existing cliente, field will ignore if it is null
+     * {@code PATCH  /clientes/:id} : Partial updates given fields of an existing
+     * cliente, field will ignore if it is null
      *
-     * @param id the id of the clienteDTO to save.
+     * @param id         the id of the clienteDTO to save.
      * @param clienteDTO the clienteDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated clienteDTO,
-     * or with status {@code 400 (Bad Request)} if the clienteDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the clienteDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the clienteDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated clienteDTO,
+     *         or with status {@code 400 (Bad Request)} if the clienteDTO is not
+     *         valid,
+     *         or with status {@code 404 (Not Found)} if the clienteDTO is not
+     *         found,
+     *         or with status {@code 500 (Internal Server Error)} if the clienteDTO
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -139,7 +149,8 @@ public class ClienteResource {
      * {@code GET  /clientes} : get all the Clientes.
      *
      * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Clientes in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of Clientes in body.
      */
     @GetMapping("")
     public ResponseEntity<List<ClienteDTO>> getAllClientes(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
@@ -153,7 +164,8 @@ public class ClienteResource {
      * {@code GET  /clientes/:id} : get the "id" cliente.
      *
      * @param id the id of the clienteDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the clienteDTO, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the clienteDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> getCliente(@PathVariable("id") Long id) {
@@ -175,5 +187,10 @@ public class ClienteResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/clientes/search")
+    public List<ClienteDTO> searchClientes(@RequestParam String query) {
+        return clienteService.search(query);
     }
 }

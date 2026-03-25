@@ -17,12 +17,25 @@ import { IVehiculo } from '../vehiculo.model';
 
 import { VehiculoFormGroup, VehiculoFormService } from './vehiculo-form.service';
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { debounceTime, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'jhi-vehiculo-update',
   templateUrl: './vehiculo-update.html',
-  imports: [TranslateDirective, TranslateModule, FontAwesomeModule, AlertError, ReactiveFormsModule, MatAutocompleteModule],
+  imports: [
+    TranslateDirective,
+    TranslateModule,
+    FontAwesomeModule,
+    AlertError,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+  ],
 })
 export class VehiculoUpdate implements OnInit {
   readonly isSaving = signal(false);
@@ -49,6 +62,23 @@ export class VehiculoUpdate implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    this.editForm.controls.cliente.valueChanges
+      .pipe(
+        debounceTime(300),
+        switchMap(value => {
+          const query = typeof value === 'string' ? value : ((value as ICliente)?.nombre ?? '');
+
+          if (!query) {
+            return of([]);
+          }
+
+          return this.clienteService.search(query);
+        }),
+      )
+      .subscribe((clientes: ICliente[]) => {
+        this.clientesSharedCollection.set(clientes);
+      });
   }
 
   previousState(): void {
@@ -101,7 +131,7 @@ export class VehiculoUpdate implements OnInit {
       .subscribe((clientes: ICliente[]) => this.clientesSharedCollection.set(clientes));
   }
 
-  displayCliente(cliente: any): string {
-    return cliente ? cliente.nombre : '';
+  displayCliente(cliente: ICliente): string {
+    return cliente?.nombre ?? '';
   }
 }

@@ -62,14 +62,12 @@
 
         <mat-form-field style="width: 100%">
           <mat-label>Cliente</mat-label>
-          <input type="text" matInput [formControl]="editForm.get('cliente')" [matAutocomplete]="auto" />
+          <input type="text" matInput [matAutocomplete]="auto" [formControl]="editForm.controls.cliente" />
 
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCliente">
-            @for (cliente of clientesSharedCollection(); track $index) {
-              <mat-option [value]="cliente">
-                {{ cliente.nombre }}
-              </mat-option>
-            }
+            <mat-option *ngFor="let cliente of clientesSharedCollection()" [value]="cliente">
+              {{ cliente.nombre }}
+            </mat-option>
           </mat-autocomplete>
         </mat-form-field>
       </div>

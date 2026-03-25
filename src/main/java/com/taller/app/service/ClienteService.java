@@ -4,6 +4,7 @@ import com.taller.app.domain.Cliente;
 import com.taller.app.repository.ClienteRepository;
 import com.taller.app.service.dto.ClienteDTO;
 import com.taller.app.service.mapper.ClienteMapper;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,5 +109,10 @@ public class ClienteService {
     public void delete(Long id) {
         LOG.debug("Request to delete Cliente : {}", id);
         clienteRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ClienteDTO> search(String query) {
+        return clienteRepository.searchByNombre(query).stream().map(clienteMapper::toDto).toList();
     }
 }
