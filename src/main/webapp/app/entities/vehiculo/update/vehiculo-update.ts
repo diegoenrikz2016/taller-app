@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { filter, finalize, map } from 'rxjs/operators';
 
 import { ICliente } from 'app/entities/cliente/cliente.model';
 import { ClienteService } from 'app/entities/cliente/service/cliente.service';
@@ -22,6 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'jhi-vehiculo-update',
@@ -35,6 +36,7 @@ import { of } from 'rxjs';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
+    CommonModule,
   ],
 })
 export class VehiculoUpdate implements OnInit {
@@ -66,15 +68,8 @@ export class VehiculoUpdate implements OnInit {
     this.editForm.controls.cliente.valueChanges
       .pipe(
         debounceTime(300),
-        switchMap(value => {
-          const query = typeof value === 'string' ? value : ((value as ICliente)?.nombre ?? '');
-
-          if (!query) {
-            return of([]);
-          }
-
-          return this.clienteService.search(query);
-        }),
+        filter(value => typeof value === 'string'),
+        switchMap(value => this.clienteService.search(value)),
       )
       .subscribe((clientes: ICliente[]) => {
         this.clientesSharedCollection.set(clientes);
