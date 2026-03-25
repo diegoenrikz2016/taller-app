@@ -113,6 +113,6 @@ public class ClienteService {
 
     @Transactional(readOnly = true)
     public List<ClienteDTO> search(String query) {
-        return clienteRepository.searchByNombre(query).stream().map(clienteMapper::toDto).toList();
+        return clienteRepository.findByNombreContainingIgnoreCase(query).stream().map(clienteMapper::toDto).toList();
     }
 }

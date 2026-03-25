@@ -189,7 +189,7 @@ public class ClienteResource {
             .build();
     }
 
-    @GetMapping("/clientes/search")
+    @GetMapping("/search")
     public ResponseEntity<List<ClienteDTO>> searchClientes(@RequestParam String query) {
         List<ClienteDTO> result = clienteService.search(query);
         return ResponseEntity.ok().body(result);

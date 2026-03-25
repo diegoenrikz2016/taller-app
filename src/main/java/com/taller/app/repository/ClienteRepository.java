@@ -12,6 +12,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-    @Query("select c from Cliente c where lower(c.nombre) like lower(concat('%', :query, '%'))")
-    List<Cliente> searchByNombre(@Param("query") String query);
+    List<Cliente> findByNombreContainingIgnoreCase(String nombre);
 }
