@@ -229,7 +229,9 @@ public class OrdenTrabajoResource {
         Document document = new Document(pdf);
 
         // 🔥 LOGO (simple por ahora)
-        Image logo = new Image(ImageDataFactory.create("https://via.placeholder.com/150x50.png?text=TALLER"));
+        Image logo = new Image(
+            ImageDataFactory.create("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXGalPMhcv9bAlnkIClI_K5i86KUL4ZFDRQA&s")
+        );
 
         logo.setAutoScale(true);
         logo.setTextAlignment(TextAlignment.CENTER);
@@ -249,8 +251,8 @@ public class OrdenTrabajoResource {
         // 📄 DATOS
         document.add(new Paragraph("Orden #: " + orden.getId()));
         document.add(new Paragraph("Fecha: " + orden.getFecha()));
-        document.add(new Paragraph("Cliente: " + orden.getVehiculo().getCliente().getNombre()));
-        document.add(new Paragraph("Vehículo: " + orden.getVehiculo().getPlaca()));
+        // document.add(new Paragraph("Cliente: " + orden.getVehiculo().getCliente().getNombre()));
+        //document.add(new Paragraph("Vehículo: " + orden.getVehiculo().getPlaca()));
 
         document.add(new Paragraph(" "));
 
@@ -261,11 +263,11 @@ public class OrdenTrabajoResource {
 
         double total = 0;
 
-        for (DetalleOrden d : orden.getDetalleses()) {
+        /*for (DetalleOrden d : orden.getDetalleses()) {
             table.addCell(d.getDescripcion());
             table.addCell("$ " + d.getPrecio());
             total += d.getPrecio().doubleValue();
-        }
+        }*/
 
         document.add(table);
 
