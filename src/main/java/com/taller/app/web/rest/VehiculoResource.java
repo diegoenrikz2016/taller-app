@@ -2,6 +2,7 @@ package com.taller.app.web.rest;
 
 import com.taller.app.repository.VehiculoRepository;
 import com.taller.app.service.VehiculoService;
+import com.taller.app.service.dto.ClienteDTO;
 import com.taller.app.service.dto.VehiculoDTO;
 import com.taller.app.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -175,5 +176,11 @@ public class VehiculoResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<VehiculoDTO>> searchVehiculos(@RequestParam String query) {
+        List<VehiculoDTO> result = vehiculoService.search(query);
+        return ResponseEntity.ok().body(result);
     }
 }

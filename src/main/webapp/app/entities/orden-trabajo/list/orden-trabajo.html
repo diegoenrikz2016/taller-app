@@ -118,7 +118,7 @@
               <td>
                 @if (ordenTrabajo.vehiculo) {
                   <div>
-                    <a [routerLink]="['/vehiculo', ordenTrabajo.vehiculo.id, 'view']">{{ ordenTrabajo.vehiculo.id }}</a>
+                    <a [routerLink]="['/vehiculo', ordenTrabajo.vehiculo.id, 'view']">{{ ordenTrabajo.vehiculo.placa }}</a>
                   </div>
                 }
               </td>
@@ -137,6 +137,10 @@
                   <button type="submit" (click)="delete(ordenTrabajo)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                     <fa-icon icon="times" />
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                  <button (click)="descargarPdf(ordenTrabajo.id)" class="btn btn-sm btn-success">
+                    <fa-icon icon="download" />
+                    <span class="d-none d-md-inline">PDF</span>
                   </button>
                 </div>
               </td>

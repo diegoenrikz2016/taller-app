@@ -4,6 +4,7 @@ import com.taller.app.domain.OrdenTrabajo;
 import com.taller.app.repository.OrdenTrabajoRepository;
 import com.taller.app.service.dto.OrdenTrabajoDTO;
 import com.taller.app.service.mapper.OrdenTrabajoMapper;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing {@link com.taller.app.domain.OrdenTrabajo}.
+ * Service Implementation for managing
+ * {@link com.taller.app.domain.OrdenTrabajo}.
  */
 @Service
 @Transactional
@@ -108,5 +110,14 @@ public class OrdenTrabajoService {
     public void delete(Long id) {
         LOG.debug("Request to delete OrdenTrabajo : {}", id);
         ordenTrabajoRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrdenTrabajoDTO> search(String query) {
+        return ordenTrabajoRepository
+            .findByObservacionesContainingIgnoreCaseOrMecanicoContainingIgnoreCase(query, query)
+            .stream()
+            .map(ordenTrabajoMapper::toDto)
+            .toList();
     }
 }

@@ -4,6 +4,7 @@ import com.taller.app.domain.Vehiculo;
 import com.taller.app.repository.VehiculoRepository;
 import com.taller.app.service.dto.VehiculoDTO;
 import com.taller.app.service.mapper.VehiculoMapper;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,5 +109,14 @@ public class VehiculoService {
     public void delete(Long id) {
         LOG.debug("Request to delete Vehiculo : {}", id);
         vehiculoRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<VehiculoDTO> search(String query) {
+        return vehiculoRepository
+            .findByPlacaContainingIgnoreCaseOrMarcaContainingIgnoreCaseOrModeloContainingIgnoreCase(query, query, query)
+            .stream()
+            .map(vehiculoMapper::toDto)
+            .toList();
     }
 }

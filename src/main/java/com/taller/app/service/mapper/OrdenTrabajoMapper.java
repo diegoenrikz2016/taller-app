@@ -11,11 +11,6 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface OrdenTrabajoMapper extends EntityMapper<OrdenTrabajoDTO, OrdenTrabajo> {
-    @Mapping(target = "vehiculo", source = "vehiculo", qualifiedByName = "vehiculoId")
+    @Mapping(target = "vehiculo", source = "vehiculo")
     OrdenTrabajoDTO toDto(OrdenTrabajo s);
-
-    @Named("vehiculoId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    VehiculoDTO toDtoVehiculoId(Vehiculo vehiculo);
 }

@@ -20,6 +20,7 @@ import { SortByDirective, SortDirective, SortService, type SortState, sortStateS
 import { OrdenTrabajoDeleteDialog } from '../delete/orden-trabajo-delete-dialog';
 import { IOrdenTrabajo } from '../orden-trabajo.model';
 import { OrdenTrabajoService } from '../service/orden-trabajo.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'jhi-orden-trabajo',
@@ -56,6 +57,7 @@ export class OrdenTrabajo implements OnInit {
   protected readonly activatedRoute = inject(ActivatedRoute);
   protected readonly sortService = inject(SortService);
   protected modalService = inject(NgbModal);
+  protected http = inject(HttpClient);
 
   constructor() {
     effect(() => {
@@ -138,6 +140,17 @@ export class OrdenTrabajo implements OnInit {
     this.router.navigate(['./'], {
       relativeTo: this.activatedRoute,
       queryParams: queryParamsObj,
+    });
+  }
+
+  descargarPdf(id: number): void {
+    this.http.get(`/api/orden-trabajos/${id}/pdf`, { responseType: 'blob' }).subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `orden_${id}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
     });
   }
 }

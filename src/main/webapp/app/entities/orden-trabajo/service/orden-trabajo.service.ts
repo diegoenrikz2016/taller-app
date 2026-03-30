@@ -136,4 +136,10 @@ export class OrdenTrabajoService extends OrdenTrabajosService {
   protected convertResponseArrayFromServer(res: RestOrdenTrabajo[]): IOrdenTrabajo[] {
     return res.map(item => this.convertValueFromServer(item));
   }
+
+  search(query: string): Observable<IOrdenTrabajo[]> {
+    return this.http.get<IOrdenTrabajo[]>(`${this.resourceUrl}/search`, {
+      params: { query },
+    });
+  }
 }

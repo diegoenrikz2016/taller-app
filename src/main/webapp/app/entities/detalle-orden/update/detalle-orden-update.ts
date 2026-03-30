@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { filter, finalize, map } from 'rxjs/operators';
 
 import { IOrdenTrabajo } from 'app/entities/orden-trabajo/orden-trabajo.model';
 import { OrdenTrabajoService } from 'app/entities/orden-trabajo/service/orden-trabajo.service';
@@ -17,16 +17,34 @@ import { DetalleOrdenService } from '../service/detalle-orden.service';
 
 import { DetalleOrdenFormGroup, DetalleOrdenFormService } from './detalle-orden-form.service';
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { debounceTime, switchMap } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'jhi-detalle-orden-update',
   templateUrl: './detalle-orden-update.html',
-  imports: [TranslateDirective, TranslateModule, FontAwesomeModule, AlertError, ReactiveFormsModule],
+  imports: [
+    TranslateDirective,
+    TranslateModule,
+    FontAwesomeModule,
+    AlertError,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    CommonModule,
+  ],
 })
 export class DetalleOrdenUpdate implements OnInit {
   readonly isSaving = signal(false);
   detalleOrden: IDetalleOrden | null = null;
 
   ordenTrabajosSharedCollection = signal<IOrdenTrabajo[]>([]);
+
+  ordenesSharedCollection = signal<IOrdenTrabajo[]>([]);
 
   protected detalleOrdenService = inject(DetalleOrdenService);
   protected detalleOrdenFormService = inject(DetalleOrdenFormService);
@@ -47,6 +65,16 @@ export class DetalleOrdenUpdate implements OnInit {
       }
 
       this.loadRelationshipsOptions();
+
+      this.editForm.controls.ordenTrabajo.valueChanges
+        .pipe(
+          debounceTime(300),
+          filter(value => typeof value === 'string'),
+          switchMap(value => this.ordenTrabajoService.search(value)),
+        )
+        .subscribe((ordenes: IOrdenTrabajo[]) => {
+          this.ordenesSharedCollection.set(ordenes);
+        });
     });
   }
 
@@ -102,5 +130,9 @@ export class DetalleOrdenUpdate implements OnInit {
         ),
       )
       .subscribe((ordenTrabajos: IOrdenTrabajo[]) => this.ordenTrabajosSharedCollection.set(ordenTrabajos));
+  }
+
+  displayOrden(orden: IOrdenTrabajo): string {
+    return orden ? `#${orden.id} - ${orden.vehiculo?.placa ?? ''}` : '';
   }
 }

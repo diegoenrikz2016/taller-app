@@ -5,7 +5,7 @@ export interface IDetalleOrden {
   descripcion?: string | null;
   cantidad?: number | null;
   precio?: number | null;
-  ordenTrabajo?: Pick<IOrdenTrabajo, 'id'> | null;
+  ordenTrabajo?: IOrdenTrabajo | null;
 }
 
 export type NewDetalleOrden = Omit<IDetalleOrden, 'id'> & { id: null };

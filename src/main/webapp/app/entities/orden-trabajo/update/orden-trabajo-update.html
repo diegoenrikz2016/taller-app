@@ -94,7 +94,7 @@
           <input type="number" class="form-control" name="total" id="field_total" data-cy="total" formControlName="total" />
         </div>
 
-        <div class="mb-3">
+        <!--div class="mb-3">
           <label class="form-label" for="field_vehiculo" jhiTranslate="tallerApp.ordenTrabajo.vehiculo">Vehiculo</label>
           <select
             class="form-control"
@@ -109,7 +109,18 @@
               <option [ngValue]="vehiculoOption">{{ vehiculoOption.placa }}</option>
             }
           </select>
-        </div>
+        </div-->
+
+        <mat-form-field style="width: 100%">
+          <mat-label>Vehículo</mat-label>
+          <input type="text" matInput [matAutocomplete]="auto" [formControl]="editForm.controls.vehiculo" />
+
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayVehiculo">
+            <mat-option *ngFor="let vehiculo of vehiculosSharedCollection()" [value]="vehiculo">
+              {{ vehiculo.placa }} - {{ vehiculo.marca }} {{ vehiculo.modelo }} ({{ vehiculo.cliente?.nombre }})
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
       </div>
 
       <div>

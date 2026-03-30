@@ -1,6 +1,7 @@
 package com.taller.app.web.rest;
 
 import com.taller.app.repository.OrdenTrabajoRepository;
+import com.taller.app.service.OrdenTrabajoPdfService;
 import com.taller.app.service.OrdenTrabajoService;
 import com.taller.app.service.dto.OrdenTrabajoDTO;
 import com.taller.app.web.rest.errors.BadRequestAlertException;
@@ -40,10 +41,17 @@ public class OrdenTrabajoResource {
 
     private final OrdenTrabajoService ordenTrabajoService;
 
+    private final OrdenTrabajoPdfService ordenTrabajoPdfService;
+
     private final OrdenTrabajoRepository ordenTrabajoRepository;
 
-    public OrdenTrabajoResource(OrdenTrabajoService ordenTrabajoService, OrdenTrabajoRepository ordenTrabajoRepository) {
+    public OrdenTrabajoResource(
+        OrdenTrabajoService ordenTrabajoService,
+        OrdenTrabajoRepository ordenTrabajoRepository,
+        OrdenTrabajoPdfService ordenTrabajoPdfService
+    ) {
         this.ordenTrabajoService = ordenTrabajoService;
+        this.ordenTrabajoPdfService = ordenTrabajoPdfService;
         this.ordenTrabajoRepository = ordenTrabajoRepository;
     }
 
@@ -51,7 +59,9 @@ public class OrdenTrabajoResource {
      * {@code POST  /orden-trabajos} : Create a new ordenTrabajo.
      *
      * @param ordenTrabajoDTO the ordenTrabajoDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new ordenTrabajoDTO, or with status {@code 400 (Bad Request)} if the ordenTrabajo has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new ordenTrabajoDTO, or with status
+     *         {@code 400 (Bad Request)} if the ordenTrabajo has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -70,11 +80,14 @@ public class OrdenTrabajoResource {
     /**
      * {@code PUT  /orden-trabajos/:id} : Updates an existing ordenTrabajo.
      *
-     * @param id the id of the ordenTrabajoDTO to save.
+     * @param id              the id of the ordenTrabajoDTO to save.
      * @param ordenTrabajoDTO the ordenTrabajoDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated ordenTrabajoDTO,
-     * or with status {@code 400 (Bad Request)} if the ordenTrabajoDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the ordenTrabajoDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated ordenTrabajoDTO,
+     *         or with status {@code 400 (Bad Request)} if the ordenTrabajoDTO is
+     *         not valid,
+     *         or with status {@code 500 (Internal Server Error)} if the
+     *         ordenTrabajoDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
@@ -101,14 +114,19 @@ public class OrdenTrabajoResource {
     }
 
     /**
-     * {@code PATCH  /orden-trabajos/:id} : Partial updates given fields of an existing ordenTrabajo, field will ignore if it is null
+     * {@code PATCH  /orden-trabajos/:id} : Partial updates given fields of an
+     * existing ordenTrabajo, field will ignore if it is null
      *
-     * @param id the id of the ordenTrabajoDTO to save.
+     * @param id              the id of the ordenTrabajoDTO to save.
      * @param ordenTrabajoDTO the ordenTrabajoDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated ordenTrabajoDTO,
-     * or with status {@code 400 (Bad Request)} if the ordenTrabajoDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the ordenTrabajoDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the ordenTrabajoDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated ordenTrabajoDTO,
+     *         or with status {@code 400 (Bad Request)} if the ordenTrabajoDTO is
+     *         not valid,
+     *         or with status {@code 404 (Not Found)} if the ordenTrabajoDTO is not
+     *         found,
+     *         or with status {@code 500 (Internal Server Error)} if the
+     *         ordenTrabajoDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -140,7 +158,8 @@ public class OrdenTrabajoResource {
      * {@code GET  /orden-trabajos} : get all the Orden Trabajos.
      *
      * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Orden Trabajos in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of Orden Trabajos in body.
      */
     @GetMapping("")
     public ResponseEntity<List<OrdenTrabajoDTO>> getAllOrdenTrabajos(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
@@ -154,7 +173,8 @@ public class OrdenTrabajoResource {
      * {@code GET  /orden-trabajos/:id} : get the "id" ordenTrabajo.
      *
      * @param id the id of the ordenTrabajoDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the ordenTrabajoDTO, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the ordenTrabajoDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<OrdenTrabajoDTO> getOrdenTrabajo(@PathVariable("id") Long id) {
@@ -176,5 +196,23 @@ public class OrdenTrabajoResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<OrdenTrabajoDTO>> searchOrdenes(@RequestParam String query) {
+        List<OrdenTrabajoDTO> list = ordenTrabajoService.search(query);
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<byte[]> generarPdf(@PathVariable Long id) {
+        OrdenTrabajoDTO orden = ordenTrabajoService.findOne(id).orElseThrow(() -> new RuntimeException("Orden no encontrada"));
+
+        byte[] pdf = ordenTrabajoPdfService.generarPdf(orden);
+
+        return ResponseEntity.ok()
+            .header("Content-Disposition", "attachment; filename=orden_" + id + ".pdf")
+            .header("Content-Type", "application/pdf")
+            .body(pdf);
     }
 }

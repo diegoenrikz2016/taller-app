@@ -12,7 +12,7 @@ export interface IOrdenTrabajo {
   manoObra?: number | null;
   subtotal?: number | null;
   total?: number | null;
-  vehiculo?: Pick<IVehiculo, 'id'> | null;
+  vehiculo?: IVehiculo | null;
 }
 
 export type NewOrdenTrabajo = Omit<IOrdenTrabajo, 'id'> & { id: null };

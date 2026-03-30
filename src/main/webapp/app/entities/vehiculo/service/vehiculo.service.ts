@@ -87,4 +87,8 @@ export class VehiculoService extends VehiculosService {
     }
     return vehiculoCollection;
   }
+
+  search(query: string): Observable<IVehiculo[]> {
+    return this.http.get<IVehiculo[]>(`${this.resourceUrl}/search`, { params: { query } });
+  }
 }

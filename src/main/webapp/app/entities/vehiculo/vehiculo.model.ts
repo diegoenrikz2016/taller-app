@@ -6,7 +6,7 @@ export interface IVehiculo {
   marca?: string | null;
   modelo?: string | null;
   color?: string | null;
-  cliente?: Pick<ICliente, 'id'> | null;
+  cliente?: ICliente | null;
 }
 
 export type NewVehiculo = Omit<IVehiculo, 'id'> & { id: null };

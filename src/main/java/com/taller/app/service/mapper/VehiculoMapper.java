@@ -11,11 +11,6 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface VehiculoMapper extends EntityMapper<VehiculoDTO, Vehiculo> {
-    @Mapping(target = "cliente", source = "cliente", qualifiedByName = "clienteId")
+    @Mapping(target = "cliente", source = "cliente")
     VehiculoDTO toDto(Vehiculo s);
-
-    @Named("clienteId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ClienteDTO toDtoClienteId(Cliente cliente);
 }

@@ -82,7 +82,9 @@
               <td>
                 @if (detalleOrden.ordenTrabajo) {
                   <div>
-                    <a [routerLink]="['/orden-trabajo', detalleOrden.ordenTrabajo.id, 'view']">{{ detalleOrden.ordenTrabajo.id }}</a>
+                    <a [routerLink]="['/orden-trabajo', detalleOrden.ordenTrabajo.id, 'view']">{{
+                      detalleOrden.ordenTrabajo.observaciones
+                    }}</a>
                   </div>
                 }
               </td>

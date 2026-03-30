@@ -1,6 +1,7 @@
 package com.taller.app.repository;
 
 import com.taller.app.domain.Vehiculo;
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,10 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface VehiculoRepository extends JpaRepository<Vehiculo, Long> {}
+public interface VehiculoRepository extends JpaRepository<Vehiculo, Long> {
+    List<Vehiculo> findByPlacaContainingIgnoreCaseOrMarcaContainingIgnoreCaseOrModeloContainingIgnoreCase(
+        String placa,
+        String marca,
+        String modelo
+    );
+}

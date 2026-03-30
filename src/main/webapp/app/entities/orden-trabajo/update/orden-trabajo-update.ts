@@ -7,7 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { filter, finalize, map } from 'rxjs/operators';
 
 import { EstadoOrden } from 'app/entities/enumerations/estado-orden.model';
 import { VehiculoService } from 'app/entities/vehiculo/service/vehiculo.service';
@@ -19,10 +19,27 @@ import { OrdenTrabajoService } from '../service/orden-trabajo.service';
 
 import { OrdenTrabajoFormGroup, OrdenTrabajoFormService } from './orden-trabajo-form.service';
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { debounceTime, switchMap } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'jhi-orden-trabajo-update',
   templateUrl: './orden-trabajo-update.html',
-  imports: [TranslateDirective, TranslateModule, FontAwesomeModule, AlertError, ReactiveFormsModule, NgbInputDatepicker],
+  imports: [
+    TranslateDirective,
+    TranslateModule,
+    FontAwesomeModule,
+    AlertError,
+    ReactiveFormsModule,
+    NgbInputDatepicker,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    CommonModule,
+  ],
 })
 export class OrdenTrabajoUpdate implements OnInit {
   readonly isSaving = signal(false);
@@ -49,6 +66,16 @@ export class OrdenTrabajoUpdate implements OnInit {
       }
 
       this.loadRelationshipsOptions();
+
+      this.editForm.controls.vehiculo.valueChanges
+        .pipe(
+          debounceTime(300),
+          filter(value => typeof value === 'string'),
+          switchMap(value => this.vehiculoService.search(value)),
+        )
+        .subscribe((vehiculos: IVehiculo[]) => {
+          this.vehiculosSharedCollection.set(vehiculos);
+        });
     });
   }
 
@@ -104,5 +131,9 @@ export class OrdenTrabajoUpdate implements OnInit {
         ),
       )
       .subscribe((vehiculos: IVehiculo[]) => this.vehiculosSharedCollection.set(vehiculos));
+  }
+
+  displayVehiculo(vehiculo: IVehiculo): string {
+    return vehiculo ? `${vehiculo.marca} ${vehiculo.modelo} ${vehiculo.placa}` : '';
   }
 }
