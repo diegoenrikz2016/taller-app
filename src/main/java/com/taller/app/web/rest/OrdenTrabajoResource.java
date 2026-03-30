@@ -1,5 +1,15 @@
 package com.taller.app.web.rest;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.taller.app.domain.DetalleOrden;
+import com.taller.app.domain.OrdenTrabajo;
 import com.taller.app.repository.OrdenTrabajoRepository;
 import com.taller.app.service.OrdenTrabajoPdfService;
 import com.taller.app.service.OrdenTrabajoService;
@@ -7,6 +17,7 @@ import com.taller.app.service.dto.OrdenTrabajoDTO;
 import com.taller.app.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -205,14 +216,52 @@ public class OrdenTrabajoResource {
     }
 
     @GetMapping("/{id}/pdf")
-    public ResponseEntity<byte[]> generarPdf(@PathVariable Long id) {
-        OrdenTrabajoDTO orden = ordenTrabajoService.findOne(id).orElseThrow(() -> new RuntimeException("Orden no encontrada"));
+    public ResponseEntity<byte[]> generarPdf(@PathVariable Long id) throws Exception {
+        OrdenTrabajo orden = ordenTrabajoRepository.findById(id).orElseThrow();
 
-        byte[] pdf = ordenTrabajoPdfService.generarPdf(orden);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        return ResponseEntity.ok()
-            .header("Content-Disposition", "attachment; filename=orden_" + id + ".pdf")
-            .header("Content-Type", "application/pdf")
-            .body(pdf);
+        PdfWriter writer = new PdfWriter(out);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+
+        // 🔥 TÍTULO
+        Paragraph titulo = new Paragraph("TALLER MECÁNICO").setBold().setFontSize(18).setTextAlignment(TextAlignment.CENTER);
+
+        document.add(titulo);
+
+        document.add(new Paragraph(" "));
+
+        // 📄 DATOS
+        document.add(new Paragraph("Orden #: " + orden.getId()));
+        document.add(new Paragraph("Fecha: " + orden.getFecha()));
+        document.add(new Paragraph("Cliente: " + orden.getVehiculo().getCliente().getNombre()));
+        document.add(new Paragraph("Vehículo: " + orden.getVehiculo().getPlaca()));
+
+        document.add(new Paragraph(" "));
+
+        // 📊 TABLA DETALLE
+        Table table = new Table(2);
+        table.addHeaderCell("Servicio");
+        table.addHeaderCell("Precio");
+
+        double total = 0;
+
+        for (DetalleOrden d : orden.getDetalleses()) {
+            table.addCell(d.getDescripcion());
+            table.addCell("$ " + d.getPrecio());
+            total += d.getPrecio().doubleValue();
+        }
+
+        document.add(table);
+
+        document.add(new Paragraph(" "));
+
+        // 💰 TOTAL
+        document.add(new Paragraph("TOTAL: $" + total).setBold().setTextAlignment(TextAlignment.RIGHT));
+
+        document.close();
+
+        return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=orden.pdf").body(out.toByteArray());
     }
 }
