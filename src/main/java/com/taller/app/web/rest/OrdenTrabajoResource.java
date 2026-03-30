@@ -1,11 +1,14 @@
 package com.taller.app.web.rest;
 
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.taller.app.domain.DetalleOrden;
@@ -224,6 +227,17 @@ public class OrdenTrabajoResource {
         PdfWriter writer = new PdfWriter(out);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
+
+        // 🔥 LOGO (simple por ahora)
+        Image logo = new Image(ImageDataFactory.create("https://via.placeholder.com/150x50.png?text=TALLER"));
+
+        logo.setAutoScale(true);
+        logo.setTextAlignment(TextAlignment.CENTER);
+
+        document.add(logo);
+
+        // ESPACIO
+        document.add(new Paragraph(" "));
 
         // 🔥 TÍTULO
         Paragraph titulo = new Paragraph("TALLER MECÁNICO").setBold().setFontSize(18).setTextAlignment(TextAlignment.CENTER);
