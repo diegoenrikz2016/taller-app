@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.taller.app</groupId>
@@ -13,14 +14,15 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>4.0.3</version>
-        <relativePath/>
+        <relativePath />
         <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <!--
             Build properties
-            The spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version}
+            The spring-boot version should match the one managed by
+        https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/${jhipster-dependencies.version}
         -->
         <maven.version>3.2.5</maven.version>
         <java.version>21</java.version>
@@ -46,19 +48,19 @@
         <jib-maven-plugin.image>eclipse-temurin:21-jre-noble</jib-maven-plugin.image>
         <jib-maven-plugin.version>3.5.1</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <liquibase-plugin.password/>
-        <liquibase-plugin.url/>
-        <liquibase-plugin.username/>
+        <liquibase-plugin.password />
+        <liquibase-plugin.url />
+        <liquibase-plugin.username />
         <mapstruct.version>1.6.3</mapstruct.version>
         <maven-antrun-plugin.version>3.2.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <modernizer-maven-plugin.version>3.2.0</modernizer-maven-plugin.version>
         <nohttp-checkstyle.version>0.0.11</nohttp-checkstyle.version>
-        <profile.api-docs/>
-        <profile.e2e/>
-        <profile.no-liquibase/>
-        <profile.test/>
-        <profile.tls/>
+        <profile.api-docs />
+        <profile.e2e />
+        <profile.no-liquibase />
+        <profile.test />
+        <profile.tls />
         <properties-maven-plugin.version>1.3.0</properties-maven-plugin.version>
         <resource.delimiter>@</resource.delimiter>
         <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
@@ -286,7 +288,7 @@
             <groupId>tools.jackson.module</groupId>
             <artifactId>jackson-module-jaxb-annotations</artifactId>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>kernel</artifactId>
             <version>7.2.5</version>
@@ -295,6 +297,11 @@
             <groupId>com.itextpdf</groupId>
             <artifactId>layout</artifactId>
             <version>7.2.5</version>
+        </dependency-->
+        <dependency>
+            <groupId>com.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-pdfbox</artifactId>
+            <version>1.0.10</version>
         </dependency>
     </dependencies>
 
@@ -456,7 +463,7 @@
                             <id>enforce-dependencyConvergence</id>
                             <configuration>
                                 <rules>
-                                    <DependencyConvergence/>
+                                    <DependencyConvergence />
                                 </rules>
                                 <fail>false</fail>
                             </configuration>
@@ -468,11 +475,13 @@
                     <configuration>
                         <rules>
                             <requireMavenVersion>
-                                <message>You are running an older version of Maven. JHipster requires at least Maven ${maven.version}</message>
+                                <message>You are running an older version of Maven. JHipster
+                                    requires at least Maven ${maven.version}</message>
                                 <version>[${maven.version},)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
-                                <message>You are running an incompatible version of Java. JHipster supports JDK 21 to 25.</message>
+                                <message>You are running an incompatible version of Java. JHipster
+                                    supports JDK 21 to 25.</message>
                                 <version>[21,22),[25,26)</version>
                             </requireJavaVersion>
                         </rules>
@@ -482,7 +491,8 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <configuration>
-                        <!-- Due to spring-boot repackage, without adding this property test classes are not found
+                        <!-- Due to spring-boot repackage, without adding this property test classes
+                        are not found
                              See https://github.com/spring-projects/spring-boot/issues/6254 -->
                         <!-- Force alphabetical order to have a reproducible build -->
                         <classesDirectory>${project.build.outputDirectory}</classesDirectory>
@@ -658,7 +668,8 @@
                         </extraDirectories>
                         <pluginExtensions>
                             <pluginExtension>
-                                <implementation>com.google.cloud.tools.jib.maven.extension.springboot.JibSpringBootExtension</implementation>
+                                <implementation>
+                                    com.google.cloud.tools.jib.maven.extension.springboot.JibSpringBootExtension</implementation>
                             </pluginExtension>
                         </pluginExtensions>
                     </configuration>
@@ -743,7 +754,8 @@
                             </goals>
                         </execution>
                         <execution>
-                            <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
+                            <!-- Ensures that the code coverage report for unit tests is created
+                            after unit tests have been run -->
                             <id>post-unit-test</id>
                             <phase>test</phase>
                             <goals>
@@ -757,7 +769,8 @@
                             </goals>
                         </execution>
                         <execution>
-                            <!-- Ensures that the code coverage report for integration tests is created after integration tests have been run -->
+                            <!-- Ensures that the code coverage report for integration tests is
+                            created after integration tests have been run -->
                             <id>post-integration-tests</id>
                             <phase>post-integration-test</phase>
                             <goals>
@@ -772,13 +785,15 @@
                     <version>${liquibase.version}</version>
                     <configuration>
                         <changeLogFile>config/liquibase/master.xml</changeLogFile>
-                        <diffChangeLogFile>${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
+                        <diffChangeLogFile>
+                            ${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                         <driver>com.mysql.cj.jdbc.Driver</driver>
                         <url>${liquibase-plugin.url}</url>
-                        <defaultSchemaName/>
+                        <defaultSchemaName />
                         <username>${liquibase-plugin.username}</username>
                         <password>${liquibase-plugin.password}</password>
-                        <referenceUrl>hibernate:spring:com.taller.app.domain?dialect=org.hibernate.dialect.MySQL8Dialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                        <referenceUrl>
+                            hibernate:spring:com.taller.app.domain?dialect=org.hibernate.dialect.MySQL8Dialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                         <verbose>true</verbose>
                         <contexts>!test</contexts>
                     </configuration>
@@ -838,7 +853,7 @@
             </activation>
             <properties>
                 <!-- default Spring profiles -->
-                <liquibase-plugin.password/>
+                <liquibase-plugin.password />
                 <liquibase-plugin.url>jdbc:mysql://localhost:3306/taller</liquibase-plugin.url>
                 <liquibase-plugin.username>root</liquibase-plugin.username>
                 <profile.test>test,testdev</profile.test>
@@ -898,7 +913,7 @@
                                                 </goals>
                                             </pluginExecutionFilter>
                                             <action>
-                                                <ignore/>
+                                                <ignore />
                                             </action>
                                         </pluginExecution>
                                         <pluginExecution>
@@ -912,7 +927,7 @@
                                                 </goals>
                                             </pluginExecutionFilter>
                                             <action>
-                                                <ignore/>
+                                                <ignore />
                                             </action>
                                         </pluginExecution>
                                     </pluginExecutions>
@@ -926,7 +941,8 @@
         <profile>
             <!--
                 Profile for applying IDE-specific configuration.
-                At the moment it configures MapStruct and Hibernate JPA Metamodel Generator, which you need when working
+                At the moment it configures MapStruct and Hibernate JPA Metamodel Generator, which you need when
+            working
                 with DTOs and entity filtering.
             -->
             <id>IDE</id>
@@ -952,11 +968,12 @@
             <id>prod</id>
             <properties>
                 <!-- default Spring profiles -->
-                <liquibase-plugin.password/>
+                <liquibase-plugin.password />
                 <liquibase-plugin.url>jdbc:mysql://localhost:3306/taller</liquibase-plugin.url>
                 <liquibase-plugin.username>root</liquibase-plugin.username>
                 <profile.test>test,testprod</profile.test>
-                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>
+                    prod${profile.api-docs}${profile.tls}${profile.e2e}${profile.no-liquibase}</spring.profiles.active>
             </properties>
             <build>
                 <plugins>
@@ -1115,9 +1132,13 @@
                                     <target>
                                         <condition property="skip.npm" value="true" else="false">
                                             <and>
-                                                <available file="checksums.csv" filepath="${project.build.directory}"/>
-                                                <available file="checksums.csv.old" filepath="${project.build.directory}"/>
-                                                <filesmatch file1="${project.build.directory}/checksums.csv" file2="${project.build.directory}/checksums.csv.old"/>
+                                                <available file="checksums.csv"
+                                                    filepath="${project.build.directory}" />
+                                                <available file="checksums.csv.old"
+                                                    filepath="${project.build.directory}" />
+                                                <filesmatch
+                                                    file1="${project.build.directory}/checksums.csv"
+                                                    file2="${project.build.directory}/checksums.csv.old" />
                                             </and>
                                         </condition>
                                     </target>

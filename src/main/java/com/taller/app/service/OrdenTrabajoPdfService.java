@@ -1,47 +1,48 @@
 package com.taller.app.service;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
-import com.taller.app.service.dto.OrdenTrabajoDTO;
-import java.io.ByteArrayOutputStream;
+import com.taller.app.domain.DetalleOrden;
+import com.taller.app.domain.OrdenTrabajo;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OrdenTrabajoPdfService {
 
-    public byte[] generarPdf(OrdenTrabajoDTO orden) {
+    private final PdfService pdfService;
+
+    public OrdenTrabajoPdfService(PdfService pdfService) {
+        this.pdfService = pdfService;
+    }
+
+    public byte[] generarPdf(OrdenTrabajo orden) {
         try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            // 🔹 1. Leer HTML
+            String html = new String(Files.readAllBytes(Paths.get("src/main/resources/templates/orden-trabajo.html")));
 
-            PdfWriter writer = new PdfWriter(out);
-            PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf);
+            // 🔹 2. Construir tabla dinámica
+            String detalleHtml = "";
+            double total = 0;
 
-            //CONTENIDO
-            document.add(new Paragraph("ORDEN DE TRABAJO").setBold().setFontSize(18));
+            for (DetalleOrden d : orden.getDetalleses()) {
+                detalleHtml += "<tr>" + "<td>" + d.getDescripcion() + "</td>" + "<td>$ " + d.getPrecio() + "</td>" + "</tr>";
 
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph("ID: " + orden.getId()));
-            document.add(new Paragraph("Fecha: " + orden.getFecha()));
-
-            if (orden.getVehiculo() != null) {
-                document.add(new Paragraph("Vehículo: " + orden.getVehiculo().getPlaca()));
-
-                if (orden.getVehiculo().getCliente() != null) {
-                    document.add(new Paragraph("Cliente: " + orden.getVehiculo().getCliente().getNombre()));
-                }
+                total += d.getPrecio().doubleValue();
             }
 
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph("Observaciones: " + orden.getObservaciones()));
+            // 🔹 3. Reemplazar variables
+            html = html
+                .replace("{{orden}}", String.valueOf(orden.getId()))
+                .replace("{{fecha}}", orden.getFecha().toString())
+                .replace("{{cliente}}", orden.getVehiculo().getCliente().getNombre())
+                .replace("{{vehiculo}}", orden.getVehiculo().getPlaca())
+                .replace("{{detalle}}", detalleHtml)
+                .replace("{{total}}", "$ " + total);
 
-            document.close();
-
-            return out.toByteArray();
+            // 🔹 4. Convertir a PDF
+            return pdfService.generarPdf(html);
         } catch (Exception e) {
-            throw new RuntimeException("Error generando PDF", e);
+            throw new RuntimeException("Error generando PDF de orden", e);
         }
     }
 }

@@ -1,21 +1,12 @@
 package com.taller.app.web.rest;
 
-import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.*;
-import com.itextpdf.layout.element.Image;
-import com.itextpdf.layout.properties.TextAlignment;
-import com.itextpdf.layout.properties.TextAlignment;
+import com.openhtmltopdf.bidi.ParagraphSplitter.Paragraph;
 import com.taller.app.domain.DetalleOrden;
 import com.taller.app.domain.OrdenTrabajo;
 import com.taller.app.repository.OrdenTrabajoRepository;
 import com.taller.app.service.OrdenTrabajoPdfService;
 import com.taller.app.service.OrdenTrabajoService;
+import com.taller.app.service.PdfService;
 import com.taller.app.service.dto.OrdenTrabajoDTO;
 import com.taller.app.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -219,65 +210,14 @@ public class OrdenTrabajoResource {
     }
 
     @GetMapping("/{id}/pdf")
-    public ResponseEntity<byte[]> generarPdf(@PathVariable Long id) throws Exception {
-        OrdenTrabajo orden = ordenTrabajoRepository.findById(id).orElseThrow();
+    public ResponseEntity<byte[]> generarPdf(@PathVariable Long id) {
+        OrdenTrabajo orden = ordenTrabajoRepository.findByIdWithRelationships(id).orElseThrow();
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] pdf = ordenTrabajoPdfService.generarPdf(orden);
 
-        PdfWriter writer = new PdfWriter(out);
-        PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf);
-
-        // 🔥 LOGO (simple por ahora)
-        Image logo = new Image(
-            ImageDataFactory.create("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXGalPMhcv9bAlnkIClI_K5i86KUL4ZFDRQA&s")
-        );
-
-        logo.setAutoScale(true);
-        logo.setTextAlignment(TextAlignment.CENTER);
-
-        document.add(logo);
-
-        // ESPACIO
-        document.add(new Paragraph(" "));
-
-        // 🔥 TÍTULO
-        Paragraph titulo = new Paragraph("TALLER MECÁNICO").setBold().setFontSize(18).setTextAlignment(TextAlignment.CENTER);
-
-        document.add(titulo);
-
-        document.add(new Paragraph(" "));
-
-        // 📄 DATOS
-        document.add(new Paragraph("Orden #: " + orden.getId()));
-        document.add(new Paragraph("Fecha: " + orden.getFecha()));
-        // document.add(new Paragraph("Cliente: " + orden.getVehiculo().getCliente().getNombre()));
-        //document.add(new Paragraph("Vehículo: " + orden.getVehiculo().getPlaca()));
-
-        document.add(new Paragraph(" "));
-
-        // 📊 TABLA DETALLE
-        Table table = new Table(2);
-        table.addHeaderCell("Servicio");
-        table.addHeaderCell("Precio");
-
-        double total = 0;
-
-        /*for (DetalleOrden d : orden.getDetalleses()) {
-            table.addCell(d.getDescripcion());
-            table.addCell("$ " + d.getPrecio());
-            total += d.getPrecio().doubleValue();
-        }*/
-
-        document.add(table);
-
-        document.add(new Paragraph(" "));
-
-        // 💰 TOTAL
-        document.add(new Paragraph("TOTAL: $" + total).setBold().setTextAlignment(TextAlignment.RIGHT));
-
-        document.close();
-
-        return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=orden.pdf").body(out.toByteArray());
+        return ResponseEntity.ok()
+            .header("Content-Type", "application/pdf")
+            .header("Content-Disposition", "inline; filename=orden.pdf")
+            .body(pdf);
     }
 }

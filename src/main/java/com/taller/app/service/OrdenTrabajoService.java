@@ -2,12 +2,14 @@ package com.taller.app.service;
 
 import com.taller.app.domain.OrdenTrabajo;
 import com.taller.app.repository.OrdenTrabajoRepository;
+import com.taller.app.service.PdfService;
 import com.taller.app.service.dto.OrdenTrabajoDTO;
 import com.taller.app.service.mapper.OrdenTrabajoMapper;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class OrdenTrabajoService {
     private final OrdenTrabajoRepository ordenTrabajoRepository;
 
     private final OrdenTrabajoMapper ordenTrabajoMapper;
+
+    @Autowired
+    private PdfService pdfService;
 
     public OrdenTrabajoService(OrdenTrabajoRepository ordenTrabajoRepository, OrdenTrabajoMapper ordenTrabajoMapper) {
         this.ordenTrabajoRepository = ordenTrabajoRepository;
@@ -99,7 +104,7 @@ public class OrdenTrabajoService {
     @Transactional(readOnly = true)
     public Optional<OrdenTrabajoDTO> findOne(Long id) {
         LOG.debug("Request to get OrdenTrabajo : {}", id);
-        return ordenTrabajoRepository.findById(id).map(ordenTrabajoMapper::toDto);
+        return ordenTrabajoRepository.findByIdWithRelationships(id).map(ordenTrabajoMapper::toDto);
     }
 
     /**

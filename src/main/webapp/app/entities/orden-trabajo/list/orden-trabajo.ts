@@ -144,13 +144,15 @@ export class OrdenTrabajo implements OnInit {
   }
 
   descargarPdf(id: number): void {
-    this.http.get(`/api/orden-trabajos/${id}/pdf`, { responseType: 'blob' }).subscribe(blob => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `orden_${id}.pdf`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    });
+    this.http
+      .get(`api/orden-trabajos/${id}/pdf`, {
+        responseType: 'blob',
+      })
+      .subscribe(res => {
+        const file = new Blob([res], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(file);
+
+        window.open(url);
+      });
   }
 }
