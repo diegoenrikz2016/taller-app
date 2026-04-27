@@ -17,10 +17,8 @@ public class OrdenTrabajoPdfService {
 
     public byte[] generarPdf(OrdenTrabajo orden) {
         try {
-            // 🔹 1. Leer HTML
             String html = new String(Files.readAllBytes(Paths.get("src/main/resources/templates/orden-trabajo.html")));
 
-            // 🔹 2. Construir tabla dinámica
             String detalleHtml = "";
             double total = 0;
 
@@ -30,16 +28,22 @@ public class OrdenTrabajoPdfService {
                 total += d.getPrecio().doubleValue();
             }
 
-            // 🔹 3. Reemplazar variables
+            // 🔥 NUEVO: datos adicionales
+            String telefono = orden.getVehiculo().getCliente().getTelefono() != null ? orden.getVehiculo().getCliente().getTelefono() : "";
+
+            String email = orden.getVehiculo().getCliente().getCedula() != null ? orden.getVehiculo().getCliente().getCedula() : "";
+
+            // 🔥 REEMPLAZOS COMPLETOS
             html = html
                 .replace("{{orden}}", String.valueOf(orden.getId()))
                 .replace("{{fecha}}", orden.getFecha().toString())
                 .replace("{{cliente}}", orden.getVehiculo().getCliente().getNombre())
                 .replace("{{vehiculo}}", orden.getVehiculo().getPlaca())
+                .replace("{{telefono}}", telefono)
+                .replace("{{email}}", email)
                 .replace("{{detalle}}", detalleHtml)
                 .replace("{{total}}", "$ " + total);
 
-            // 🔹 4. Convertir a PDF
             return pdfService.generarPdf(html);
         } catch (Exception e) {
             throw new RuntimeException("Error generando PDF de orden", e);
