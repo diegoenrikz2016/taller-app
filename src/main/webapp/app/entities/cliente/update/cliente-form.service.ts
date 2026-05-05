@@ -22,6 +22,7 @@ type ClienteFormGroupContent = {
   cedula: FormControl<ICliente['cedula']>;
   telefono: FormControl<ICliente['telefono']>;
   direccion: FormControl<ICliente['direccion']>;
+  email: FormControl<ICliente['email']>;
 };
 
 export type ClienteFormGroup = FormGroup<ClienteFormGroupContent>;
@@ -47,6 +48,7 @@ export class ClienteFormService {
       cedula: new FormControl(clienteRawValue.cedula),
       telefono: new FormControl(clienteRawValue.telefono),
       direccion: new FormControl(clienteRawValue.direccion),
+      email: new FormControl(clienteRawValue.email),
     });
   }
 

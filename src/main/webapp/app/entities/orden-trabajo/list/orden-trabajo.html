@@ -68,24 +68,21 @@
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
-            <th scope="col" jhiSortBy="manoObra">
+            <th scope="col" jhiSortBy="valorPactado">
               <div class="d-flex">
-                <span jhiTranslate="tallerApp.ordenTrabajo.manoObra">Mano Obra</span>
-
+                <span>Valor Pactado</span>
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
-            <th scope="col" jhiSortBy="subtotal">
+            <th scope="col" jhiSortBy="abono">
               <div class="d-flex">
-                <span jhiTranslate="tallerApp.ordenTrabajo.subtotal">Subtotal</span>
-
+                <span>Abono</span>
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
-            <th scope="col" jhiSortBy="total">
+            <th scope="col" jhiSortBy="saldo">
               <div class="d-flex">
-                <span jhiTranslate="tallerApp.ordenTrabajo.total">Total</span>
-
+                <span>Saldo</span>
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
@@ -112,9 +109,9 @@
               </td>
               <td>{{ ordenTrabajo.observaciones }}</td>
               <td>{{ ordenTrabajo.mecanico }}</td>
-              <td>{{ ordenTrabajo.manoObra }}</td>
-              <td>{{ ordenTrabajo.subtotal }}</td>
-              <td>{{ ordenTrabajo.total }}</td>
+              <td>{{ ordenTrabajo.valorPactado }}</td>
+              <td>{{ ordenTrabajo.abono }}</td>
+              <td>{{ ordenTrabajo.saldo }}</td>
               <td>
                 @if (ordenTrabajo.vehiculo) {
                   <div>
@@ -137,10 +134,6 @@
                   <button type="submit" (click)="delete(ordenTrabajo)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                     <fa-icon icon="times" />
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                  <button (click)="descargarPdf(ordenTrabajo.id)" class="btn btn-sm btn-success">
-                    <fa-icon icon="download" />
-                    <span class="d-none d-md-inline">PDF</span>
                   </button>
                 </div>
               </td>

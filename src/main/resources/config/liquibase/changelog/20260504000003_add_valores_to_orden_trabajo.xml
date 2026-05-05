@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260504000003-1" author="taller">
+        <addColumn tableName="orden_trabajo">
+            <column name="valor_pactado" type="decimal(21,2)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="abono" type="decimal(21,2)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="saldo" type="decimal(21,2)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="trabajos_extras" type="varchar(1000)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

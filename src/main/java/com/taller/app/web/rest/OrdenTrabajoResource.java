@@ -3,11 +3,16 @@ package com.taller.app.web.rest;
 import com.openhtmltopdf.bidi.ParagraphSplitter.Paragraph;
 import com.taller.app.domain.DetalleOrden;
 import com.taller.app.domain.OrdenTrabajo;
+import com.taller.app.domain.OrdenTrabajoPdf;
+import com.taller.app.repository.OrdenTrabajoPdfRepository;
+import com.taller.app.repository.OrdenTrabajoPdfRepository.PdfMeta;
 import com.taller.app.repository.OrdenTrabajoRepository;
 import com.taller.app.service.OrdenTrabajoPdfService;
 import com.taller.app.service.OrdenTrabajoService;
 import com.taller.app.service.PdfService;
 import com.taller.app.service.dto.OrdenTrabajoDTO;
+import com.taller.app.service.dto.OrdenTrabajoPdfMetaDTO;
+import com.taller.app.service.dto.OrdenTrabajoPdfRequestDTO;
 import com.taller.app.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -45,19 +50,20 @@ public class OrdenTrabajoResource {
     private String applicationName;
 
     private final OrdenTrabajoService ordenTrabajoService;
-
     private final OrdenTrabajoPdfService ordenTrabajoPdfService;
-
     private final OrdenTrabajoRepository ordenTrabajoRepository;
+    private final OrdenTrabajoPdfRepository ordenTrabajoPdfRepository;
 
     public OrdenTrabajoResource(
         OrdenTrabajoService ordenTrabajoService,
         OrdenTrabajoRepository ordenTrabajoRepository,
-        OrdenTrabajoPdfService ordenTrabajoPdfService
+        OrdenTrabajoPdfService ordenTrabajoPdfService,
+        OrdenTrabajoPdfRepository ordenTrabajoPdfRepository
     ) {
         this.ordenTrabajoService = ordenTrabajoService;
         this.ordenTrabajoPdfService = ordenTrabajoPdfService;
         this.ordenTrabajoRepository = ordenTrabajoRepository;
+        this.ordenTrabajoPdfRepository = ordenTrabajoPdfRepository;
     }
 
     /**
@@ -209,15 +215,34 @@ public class OrdenTrabajoResource {
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping("/{id}/pdf")
-    public ResponseEntity<byte[]> generarPdf(@PathVariable Long id) {
+    @PostMapping("/{id}/pdf")
+    public ResponseEntity<byte[]> generarPdf(@PathVariable Long id, @RequestBody OrdenTrabajoPdfRequestDTO pdfRequest) {
         OrdenTrabajo orden = ordenTrabajoRepository.findByIdWithRelationships(id).orElseThrow();
-
-        byte[] pdf = ordenTrabajoPdfService.generarPdf(orden);
-
+        byte[] pdf = ordenTrabajoPdfService.generarPdf(orden, pdfRequest);
         return ResponseEntity.ok()
             .header("Content-Type", "application/pdf")
-            .header("Content-Disposition", "inline; filename=orden.pdf")
+            .header("Content-Disposition", "inline; filename=orden-" + id + ".pdf")
             .body(pdf);
+    }
+
+    @GetMapping("/pdfs")
+    public ResponseEntity<List<OrdenTrabajoPdfMetaDTO>> listarPdfs() {
+        List<OrdenTrabajoPdfMetaDTO> result = ordenTrabajoPdfRepository
+            .findAllMeta()
+            .stream()
+            .map(p -> new OrdenTrabajoPdfMetaDTO(p.getId(), p.getNombreArchivo(), p.getFechaGeneracion(), p.getOrdenTrabajoId()))
+            .toList();
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/pdfs/{pdfId}/download")
+    public ResponseEntity<byte[]> descargarPdf(@PathVariable Long pdfId) {
+        OrdenTrabajoPdf pdf = ordenTrabajoPdfRepository
+            .findById(pdfId)
+            .orElseThrow(() -> new BadRequestAlertException("PDF no encontrado", "ordenTrabajoPdf", "notfound"));
+        return ResponseEntity.ok()
+            .header("Content-Type", "application/pdf")
+            .header("Content-Disposition", "attachment; filename=\"" + pdf.getNombreArchivo() + "\"")
+            .body(pdf.getContenido());
     }
 }

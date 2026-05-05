@@ -113,10 +113,6 @@ public class VehiculoService {
 
     @Transactional(readOnly = true)
     public List<VehiculoDTO> search(String query) {
-        return vehiculoRepository
-            .findByPlacaContainingIgnoreCaseOrMarcaContainingIgnoreCaseOrModeloContainingIgnoreCase(query, query, query)
-            .stream()
-            .map(vehiculoMapper::toDto)
-            .toList();
+        return vehiculoRepository.findByPlacaContainingIgnoreCase(query).stream().map(vehiculoMapper::toDto).toList();
     }
 }

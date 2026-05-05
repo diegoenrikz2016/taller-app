@@ -51,14 +51,14 @@ class OrdenTrabajoResourceIT {
     private static final String DEFAULT_MECANICO = "AAAAAAAAAA";
     private static final String UPDATED_MECANICO = "BBBBBBBBBB";
 
-    private static final BigDecimal DEFAULT_MANO_OBRA = new BigDecimal(1);
-    private static final BigDecimal UPDATED_MANO_OBRA = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_VALOR_PACTADO = new BigDecimal(1);
+    private static final BigDecimal UPDATED_VALOR_PACTADO = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_SUBTOTAL = new BigDecimal(1);
-    private static final BigDecimal UPDATED_SUBTOTAL = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_ABONO = new BigDecimal(1);
+    private static final BigDecimal UPDATED_ABONO = new BigDecimal(2);
 
-    private static final BigDecimal DEFAULT_TOTAL = new BigDecimal(1);
-    private static final BigDecimal UPDATED_TOTAL = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_SALDO = BigDecimal.ZERO;
+    private static final BigDecimal UPDATED_SALDO = BigDecimal.ZERO;
 
     private static final String ENTITY_API_URL = "/api/orden-trabajos";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -97,26 +97,20 @@ class OrdenTrabajoResourceIT {
             .estado(DEFAULT_ESTADO)
             .observaciones(DEFAULT_OBSERVACIONES)
             .mecanico(DEFAULT_MECANICO)
-            .manoObra(DEFAULT_MANO_OBRA)
-            .subtotal(DEFAULT_SUBTOTAL)
-            .total(DEFAULT_TOTAL);
+            .valorPactado(DEFAULT_VALOR_PACTADO)
+            .abono(DEFAULT_ABONO)
+            .saldo(DEFAULT_SALDO);
     }
 
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
     public static OrdenTrabajo createUpdatedEntity() {
         return new OrdenTrabajo()
             .fecha(UPDATED_FECHA)
             .estado(UPDATED_ESTADO)
             .observaciones(UPDATED_OBSERVACIONES)
             .mecanico(UPDATED_MECANICO)
-            .manoObra(UPDATED_MANO_OBRA)
-            .subtotal(UPDATED_SUBTOTAL)
-            .total(UPDATED_TOTAL);
+            .valorPactado(UPDATED_VALOR_PACTADO)
+            .abono(UPDATED_ABONO)
+            .saldo(UPDATED_SALDO);
     }
 
     @BeforeEach
@@ -224,9 +218,9 @@ class OrdenTrabajoResourceIT {
             .andExpect(jsonPath("$.[*].estado").value(hasItem(DEFAULT_ESTADO.toString())))
             .andExpect(jsonPath("$.[*].observaciones").value(hasItem(DEFAULT_OBSERVACIONES)))
             .andExpect(jsonPath("$.[*].mecanico").value(hasItem(DEFAULT_MECANICO)))
-            .andExpect(jsonPath("$.[*].manoObra").value(hasItem(sameNumber(DEFAULT_MANO_OBRA))))
-            .andExpect(jsonPath("$.[*].subtotal").value(hasItem(sameNumber(DEFAULT_SUBTOTAL))))
-            .andExpect(jsonPath("$.[*].total").value(hasItem(sameNumber(DEFAULT_TOTAL))));
+            .andExpect(jsonPath("$.[*].valorPactado").value(hasItem(sameNumber(DEFAULT_VALOR_PACTADO))))
+            .andExpect(jsonPath("$.[*].abono").value(hasItem(sameNumber(DEFAULT_ABONO))))
+            .andExpect(jsonPath("$.[*].saldo").value(hasItem(sameNumber(DEFAULT_SALDO))));
     }
 
     @Test
@@ -245,9 +239,9 @@ class OrdenTrabajoResourceIT {
             .andExpect(jsonPath("$.estado").value(DEFAULT_ESTADO.toString()))
             .andExpect(jsonPath("$.observaciones").value(DEFAULT_OBSERVACIONES))
             .andExpect(jsonPath("$.mecanico").value(DEFAULT_MECANICO))
-            .andExpect(jsonPath("$.manoObra").value(sameNumber(DEFAULT_MANO_OBRA)))
-            .andExpect(jsonPath("$.subtotal").value(sameNumber(DEFAULT_SUBTOTAL)))
-            .andExpect(jsonPath("$.total").value(sameNumber(DEFAULT_TOTAL)));
+            .andExpect(jsonPath("$.valorPactado").value(sameNumber(DEFAULT_VALOR_PACTADO)))
+            .andExpect(jsonPath("$.abono").value(sameNumber(DEFAULT_ABONO)))
+            .andExpect(jsonPath("$.saldo").value(sameNumber(DEFAULT_SALDO)));
     }
 
     @Test
@@ -274,9 +268,9 @@ class OrdenTrabajoResourceIT {
             .estado(UPDATED_ESTADO)
             .observaciones(UPDATED_OBSERVACIONES)
             .mecanico(UPDATED_MECANICO)
-            .manoObra(UPDATED_MANO_OBRA)
-            .subtotal(UPDATED_SUBTOTAL)
-            .total(UPDATED_TOTAL);
+            .valorPactado(UPDATED_VALOR_PACTADO)
+            .abono(UPDATED_ABONO)
+            .saldo(UPDATED_SALDO);
         OrdenTrabajoDTO ordenTrabajoDTO = ordenTrabajoMapper.toDto(updatedOrdenTrabajo);
 
         restOrdenTrabajoMockMvc
@@ -366,7 +360,7 @@ class OrdenTrabajoResourceIT {
         OrdenTrabajo partialUpdatedOrdenTrabajo = new OrdenTrabajo();
         partialUpdatedOrdenTrabajo.setId(ordenTrabajo.getId());
 
-        partialUpdatedOrdenTrabajo.mecanico(UPDATED_MECANICO).manoObra(UPDATED_MANO_OBRA).subtotal(UPDATED_SUBTOTAL);
+        partialUpdatedOrdenTrabajo.mecanico(UPDATED_MECANICO).valorPactado(UPDATED_VALOR_PACTADO).abono(UPDATED_ABONO);
 
         restOrdenTrabajoMockMvc
             .perform(
@@ -402,9 +396,9 @@ class OrdenTrabajoResourceIT {
             .estado(UPDATED_ESTADO)
             .observaciones(UPDATED_OBSERVACIONES)
             .mecanico(UPDATED_MECANICO)
-            .manoObra(UPDATED_MANO_OBRA)
-            .subtotal(UPDATED_SUBTOTAL)
-            .total(UPDATED_TOTAL);
+            .valorPactado(UPDATED_VALOR_PACTADO)
+            .abono(UPDATED_ABONO)
+            .saldo(UPDATED_SALDO);
 
         restOrdenTrabajoMockMvc
             .perform(

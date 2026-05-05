@@ -1,0 +1,457 @@
+<div class="container-fluid py-4" style="max-width: 960px; margin: 0 auto">
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 style="color: #1a3a5c; font-weight: bold; margin: 0">
+        <fa-icon icon="wrench" class="me-2" />
+        Nueva Orden de Trabajo
+      </h3>
+      <small class="text-muted">Complete los pasos para registrar y generar la orden</small>
+    </div>
+    <button class="btn btn-outline-secondary btn-sm" (click)="cancelar()"><fa-icon icon="arrow-left" /> Cancelar</button>
+  </div>
+
+  <!-- STEPPER -->
+  <div class="d-flex align-items-center mb-4">
+    @for (n of [1, 2, 3]; track n) {
+      <div class="d-flex align-items-center" [style.flex]="n < 3 ? '1' : 'none'">
+        <div class="d-flex flex-column align-items-center">
+          <div
+            class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+            style="width: 36px; height: 36px; font-size: 14px"
+            [style.background]="paso() >= n ? '#1a3a5c' : '#dee2e6'"
+            [style.color]="paso() >= n ? '#fff' : '#6c757d'"
+          >
+            @if (paso() > n) {
+              <fa-icon icon="check" />
+            } @else {
+              {{ n }}
+            }
+          </div>
+          <small
+            class="mt-1 text-center"
+            style="font-size: 11px; white-space: nowrap"
+            [style.color]="paso() >= n ? '#1a3a5c' : '#6c757d'"
+            [style.font-weight]="paso() === n ? 'bold' : 'normal'"
+          >
+            {{ n === 1 ? 'Vehículo' : n === 2 ? 'Trabajo' : 'Valores' }}
+          </small>
+        </div>
+        @if (n < 3) {
+          <div class="flex-grow-1 mx-2" style="height: 2px" [style.background]="paso() > n ? '#1a3a5c' : '#dee2e6'"></div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- ERROR -->
+  @if (errorMsg()) {
+    <div class="alert alert-danger alert-dismissible">
+      {{ errorMsg() }}
+      <button type="button" class="btn-close" (click)="errorMsg.set(null)"></button>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- PASO 1: VEHÍCULO Y CLIENTE                            -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  @if (paso() === 1) {
+    <div class="card shadow-sm">
+      <div class="card-header" style="background: #1a3a5c; color: #fff"><fa-icon icon="car" class="me-2" /> Vehículo y Cliente</div>
+      <div class="card-body">
+        <div class="row g-3">
+          <!-- ── BUSCAR VEHÍCULO ── -->
+          <div class="col-12">
+            <label class="form-label fw-bold">Buscar Vehículo <span class="text-danger">*</span></label>
+            <div class="position-relative">
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Buscar por placa (ej: PDU1234)..."
+                  [(ngModel)]="busquedaVehiculo"
+                  (ngModelChange)="onBuscarVehiculo()"
+                  autocomplete="off"
+                  [disabled]="!!vehiculoSeleccionado"
+                />
+                @if (vehiculoSeleccionado) {
+                  <button class="btn btn-outline-secondary" type="button" (click)="limpiarVehiculo()">
+                    <fa-icon icon="times" /> Cambiar
+                  </button>
+                }
+              </div>
+              @if (vehiculosSugeridos().length > 0 && !vehiculoSeleccionado) {
+                <ul class="list-group position-absolute w-100 shadow" style="z-index: 1000; top: 100%">
+                  @for (v of vehiculosSugeridos(); track v.id) {
+                    <li class="list-group-item list-group-item-action" style="cursor: pointer" (click)="seleccionarVehiculo(v)">
+                      <strong>{{ v.placa }}</strong> — {{ v.marca }} {{ v.modelo }}
+                      @if (v.cliente) {
+                        <span class="text-muted ms-2">| {{ v.cliente.nombre }}</span>
+                      }
+                    </li>
+                  }
+                  <li class="list-group-item list-group-item-action text-primary" style="cursor: pointer" (click)="abrirFormNuevo()">
+                    <fa-icon icon="plus" class="me-1" /> No encontré el vehículo — Registrar nuevo
+                  </li>
+                </ul>
+              }
+              @if (busquedaVehiculo.length >= 1 && vehiculosSugeridos().length === 0 && !vehiculoSeleccionado && !mostrarFormNuevo) {
+                <div class="mt-2">
+                  <button class="btn btn-outline-primary btn-sm" (click)="abrirFormNuevo()">
+                    <fa-icon icon="plus" /> Registrar nuevo vehículo y cliente
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Vehículo seleccionado -->
+          @if (vehiculoSeleccionado) {
+            <div class="col-12">
+              <div class="p-3 rounded" style="background: #e8f5e9; border: 1px solid #a5d6a7">
+                <div class="row g-1" style="font-size: 13px">
+                  <div class="col-md-3"><strong>Placa:</strong> {{ vehiculoSeleccionado.placa }}</div>
+                  <div class="col-md-3"><strong>Marca:</strong> {{ vehiculoSeleccionado.marca }}</div>
+                  <div class="col-md-3"><strong>Modelo:</strong> {{ vehiculoSeleccionado.modelo }}</div>
+                  <div class="col-md-3"><strong>Color:</strong> {{ vehiculoSeleccionado.color }}</div>
+                  @if (clienteDelVehiculo) {
+                    <div class="col-md-4"><strong>Cliente:</strong> {{ clienteDelVehiculo.nombre }}</div>
+                    <div class="col-md-4"><strong>Teléfono:</strong> {{ clienteDelVehiculo.telefono }}</div>
+                    <div class="col-md-4"><strong>Email:</strong> {{ clienteDelVehiculo.email }}</div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- ── FORMULARIO NUEVO CLIENTE + VEHÍCULO ── -->
+          @if (mostrarFormNuevo) {
+            <div class="col-12">
+              <div class="card border-0 shadow-sm">
+                <div class="card-header text-white py-2" style="background: #1a3a5c">
+                  <fa-icon icon="user-plus" class="me-2" /> Registrar Nuevo Cliente y Vehículo
+                </div>
+                <div class="card-body">
+                  <div class="row g-3">
+                    <!-- Datos del cliente -->
+                    <div class="col-12">
+                      <h6 class="fw-bold mb-2" style="color: #1a3a5c; border-bottom: 1px solid #dee2e6; padding-bottom: 6px">
+                        <fa-icon icon="user" class="me-1" /> Datos del Cliente
+                      </h6>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label form-label-sm">Nombre <span class="text-danger">*</span></label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="nuevoCliente.nombre"
+                        placeholder="Nombre completo"
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label form-label-sm">Cédula / RUC</label>
+                      <input type="text" class="form-control form-control-sm" [(ngModel)]="nuevoCliente.cedula" placeholder="1720298745" />
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label form-label-sm">Teléfono</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="nuevoCliente.telefono"
+                        placeholder="0999999999"
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label form-label-sm">Email</label>
+                      <input
+                        type="email"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="nuevoCliente.email"
+                        placeholder="correo@ejemplo.com"
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label form-label-sm">Dirección</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="nuevoCliente.direccion"
+                        placeholder="Dirección"
+                      />
+                    </div>
+
+                    <!-- Datos del vehículo -->
+                    <div class="col-12 mt-2">
+                      <h6 class="fw-bold mb-2" style="color: #1a3a5c; border-bottom: 1px solid #dee2e6; padding-bottom: 6px">
+                        <fa-icon icon="car" class="me-1" /> Datos del Vehículo
+                      </h6>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label form-label-sm">Placa <span class="text-danger">*</span></label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="nuevoVehiculo.placa"
+                        placeholder="ABC-1234"
+                        style="text-transform: uppercase"
+                      />
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label form-label-sm">Marca</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="nuevoVehiculo.marca"
+                        placeholder="Toyota, Kia..."
+                      />
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label form-label-sm">Modelo</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="nuevoVehiculo.modelo"
+                        placeholder="Corolla, Carens..."
+                      />
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label form-label-sm">Color</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="nuevoVehiculo.color"
+                        placeholder="Blanco, Negro..."
+                      />
+                    </div>
+
+                    <div class="col-12 d-flex gap-2 justify-content-end mt-2">
+                      <button class="btn btn-outline-secondary btn-sm" (click)="cancelarFormNuevo()" [disabled]="guardandoNuevo">
+                        Cancelar
+                      </button>
+                      <button
+                        class="btn btn-success btn-sm"
+                        (click)="guardarNuevoClienteYVehiculo()"
+                        [disabled]="guardandoNuevo || !nuevoCliente.nombre.trim() || !nuevoVehiculo.placa.trim()"
+                      >
+                        @if (guardandoNuevo) {
+                          <span class="spinner-border spinner-border-sm me-1"></span>
+                        }
+                        <fa-icon icon="save" /> Guardar y Continuar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- ── DATOS DE LA ORDEN ── -->
+          @if (vehiculoSeleccionado) {
+            <div class="col-12 mt-2">
+              <h6 class="fw-bold" style="color: #1a3a5c; border-bottom: 1px solid #dee2e6; padding-bottom: 6px">Datos de la Orden</h6>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Mecánico</label>
+              <input type="text" class="form-control" placeholder="Nombre del mecánico" [(ngModel)]="paso1.mecanico" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Kilometraje</label>
+              <input type="text" class="form-control" placeholder="Ej: 45000 km" [(ngModel)]="paso1.kilometraje" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Estado</label>
+              <select class="form-select" [(ngModel)]="paso1.estado">
+                @for (e of estadoOrdenValues; track e) {
+                  <option [value]="e">{{ e }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Observaciones</label>
+              <textarea
+                class="form-control"
+                rows="2"
+                placeholder="Descripción del problema..."
+                [(ngModel)]="paso1.observaciones"
+              ></textarea>
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="grua" [(ngModel)]="paso1.ingresoGrua" />
+                <label class="form-check-label" for="grua">Ingresó en grúa</label>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- PASO 2: TRABAJO A REALIZAR + INVENTARIO               -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  @if (paso() === 2) {
+    <div class="card shadow-sm">
+      <div class="card-header" style="background: #1a3a5c; color: #fff">
+        <fa-icon icon="list" class="me-2" /> Trabajo a Realizar e Inventario
+      </div>
+      <div class="card-body">
+        <!-- Trabajo a realizar -->
+        <h6 class="fw-bold mb-2" style="color: #1a3a5c">TRABAJO A REALIZAR</h6>
+        <div class="row g-2 mb-4">
+          @for (col of [partesCol1, partesCol2, partesCol3]; track $index) {
+            <div class="col-md-4">
+              <table class="table table-sm table-bordered mb-0" style="font-size: 12px">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Parte</th>
+                    <th class="text-center" style="width: 40px">E</th>
+                    <th class="text-center" style="width: 40px">P</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (parte of col; track parte) {
+                    <tr>
+                      <td>{{ parte }}</td>
+                      <td class="text-center">
+                        <input type="checkbox" [checked]="isEnderezado(parte)" (change)="toggleEnderezado(parte)" />
+                      </td>
+                      <td class="text-center">
+                        <input type="checkbox" [checked]="isPintura(parte)" (change)="togglePintura(parte)" />
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+
+        <!-- Inventario -->
+        <h6 class="fw-bold mb-2" style="color: #1a3a5c">INVENTARIO</h6>
+        <div class="row g-2">
+          @for (col of [inventarioCol1, inventarioCol2]; track $index) {
+            <div class="col-md-5">
+              <table class="table table-sm table-bordered mb-0" style="font-size: 12px">
+                <tbody>
+                  @for (item of col; track item) {
+                    <tr>
+                      <td>{{ item }}</td>
+                      <td class="text-center" style="width: 40px">
+                        <input type="checkbox" [checked]="isInventario(item)" (change)="toggleInventario(item)" />
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+          <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+            <small class="fw-bold mb-2" style="color: #1a3a5c">Combustible</small>
+            <div class="d-flex align-items-center gap-1">
+              <span style="color: #c0392b; font-weight: bold">E</span>
+              @for (seg of combustibleSegs; track seg) {
+                <div
+                  (click)="setCombustible(seg)"
+                  title="{{ seg + 1 }}/8"
+                  style="width: 14px; height: 28px; border: 1px solid #999; cursor: pointer; border-radius: 2px"
+                  [style.background]="seg < paso2.nivelCombustible ? '#27ae60' : '#f0f0f0'"
+                ></div>
+              }
+              <span style="color: #27ae60; font-weight: bold">F</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- PASO 3: VALORES Y CONFIRMACIÓN                        -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  @if (paso() === 3) {
+    <div class="card shadow-sm">
+      <div class="card-header" style="background: #1a3a5c; color: #fff"><fa-icon icon="save" class="me-2" /> Valores y Confirmación</div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Valor Pactado $</label>
+            <input
+              type="number"
+              class="form-control"
+              placeholder="0.00"
+              [(ngModel)]="paso3.valorPactado"
+              (ngModelChange)="calcularSaldo()"
+            />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Abono $</label>
+            <input type="number" class="form-control" placeholder="0.00" [(ngModel)]="paso3.abono" (ngModelChange)="calcularSaldo()" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Saldo $ <small class="text-muted fw-normal">(calculado)</small></label>
+            <input type="text" class="form-control bg-light" [value]="paso3.saldo" readonly />
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-bold">Trabajos Extras</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              placeholder="Describa trabajos adicionales..."
+              [(ngModel)]="paso3.trabajosExtras"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Resumen -->
+        <div class="mt-4 p-3 rounded" style="background: #f0f4f8; border: 1px solid #c8d8e8">
+          <h6 class="fw-bold mb-2" style="color: #1a3a5c">Resumen de la Orden</h6>
+          <div class="row g-1" style="font-size: 13px">
+            <div class="col-md-6"><strong>Cliente:</strong> {{ clienteDelVehiculo?.nombre ?? '—' }}</div>
+            <div class="col-md-6">
+              <strong>Vehículo:</strong> {{ vehiculoSeleccionado?.placa }} — {{ vehiculoSeleccionado?.marca }}
+              {{ vehiculoSeleccionado?.modelo }}
+            </div>
+            <div class="col-md-6"><strong>Mecánico:</strong> {{ paso1.mecanico || '—' }}</div>
+            <div class="col-md-6">
+              <strong>Estado:</strong>
+              <span
+                class="badge ms-1"
+                [style.background]="paso1.estado === 'PENDIENTE' ? '#ffc107' : paso1.estado === 'EN_PROCESO' ? '#0d6efd' : '#198754'"
+              >
+                {{ paso1.estado }}
+              </span>
+            </div>
+            <div class="col-md-6">
+              <strong>Partes E:</strong> {{ paso2.trabajoEnderezado.length }} | <strong>Partes P:</strong> {{ paso2.trabajoPintura.length }}
+            </div>
+            <div class="col-md-6"><strong>Inventario:</strong> {{ paso2.inventario.length }} ítems marcados</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- BOTONES DE NAVEGACIÓN -->
+  <div class="d-flex justify-content-between mt-4">
+    <div>
+      @if (paso() > 1) {
+        <button class="btn btn-outline-secondary" (click)="anterior()" [disabled]="guardando()">
+          <fa-icon icon="arrow-left" /> Anterior
+        </button>
+      }
+    </div>
+    <div class="d-flex gap-2">
+      @if (paso() < 3) {
+        <button class="btn btn-primary" (click)="siguiente()">Siguiente <fa-icon icon="arrow-right" /></button>
+      } @else {
+        <button class="btn btn-success" (click)="guardar(true)" [disabled]="guardando()">
+          @if (guardando()) {
+            <span class="spinner-border spinner-border-sm me-1"></span>
+          }
+          <fa-icon icon="file-pdf" /> Guardar + PDF
+        </button>
+      }
+    </div>
+  </div>
+</div>

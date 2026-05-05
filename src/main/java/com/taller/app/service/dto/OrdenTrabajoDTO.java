@@ -25,11 +25,10 @@ public class OrdenTrabajoDTO implements Serializable {
 
     private String mecanico;
 
-    private BigDecimal manoObra;
-
-    private BigDecimal subtotal;
-
-    private BigDecimal total;
+    private BigDecimal valorPactado;
+    private BigDecimal abono;
+    private BigDecimal saldo;
+    private String trabajosExtras;
 
     private VehiculoDTO vehiculo;
 
@@ -73,28 +72,36 @@ public class OrdenTrabajoDTO implements Serializable {
         this.mecanico = mecanico;
     }
 
-    public BigDecimal getManoObra() {
-        return manoObra;
+    public BigDecimal getValorPactado() {
+        return valorPactado;
     }
 
-    public void setManoObra(BigDecimal manoObra) {
-        this.manoObra = manoObra;
+    public void setValorPactado(BigDecimal valorPactado) {
+        this.valorPactado = valorPactado;
     }
 
-    public BigDecimal getSubtotal() {
-        return subtotal;
+    public BigDecimal getAbono() {
+        return abono;
     }
 
-    public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
+    public void setAbono(BigDecimal abono) {
+        this.abono = abono;
     }
 
-    public BigDecimal getTotal() {
-        return total;
+    public BigDecimal getSaldo() {
+        return saldo;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+
+    public String getTrabajosExtras() {
+        return trabajosExtras;
+    }
+
+    public void setTrabajosExtras(String trabajosExtras) {
+        this.trabajosExtras = trabajosExtras;
     }
 
     public VehiculoDTO getVehiculo() {
@@ -135,9 +142,9 @@ public class OrdenTrabajoDTO implements Serializable {
             ", estado='" + getEstado() + "'" +
             ", observaciones='" + getObservaciones() + "'" +
             ", mecanico='" + getMecanico() + "'" +
-            ", manoObra=" + getManoObra() +
-            ", subtotal=" + getSubtotal() +
-            ", total=" + getTotal() +
+            ", valorPactado=" + getValorPactado() +
+            ", abono=" + getAbono() +
+            ", saldo=" + getSaldo() +
             ", vehiculo=" + getVehiculo() +
             "}";
     }

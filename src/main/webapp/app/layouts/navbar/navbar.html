@@ -28,6 +28,22 @@
           </a>
         </li>
         @if (account() !== null) {
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="/taller/nueva-orden" (click)="collapseNavbar()">
+              <span>
+                <fa-icon icon="wrench" />
+                <span>Nueva Orden</span>
+              </span>
+            </a>
+          </li>
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="/orden-trabajo/pdfs" (click)="collapseNavbar()">
+              <span>
+                <fa-icon icon="file-pdf" />
+                <span>PDFs Generados</span>
+              </span>
+            </a>
+          </li>
           <li
             ngbDropdown
             class="nav-item dropdown pointer"

@@ -53,12 +53,13 @@ public class OrdenTrabajoAsserts {
             .satisfies(a -> assertThat(a.getObservaciones()).as("check observaciones").isEqualTo(expected.getObservaciones()))
             .satisfies(a -> assertThat(a.getMecanico()).as("check mecanico").isEqualTo(expected.getMecanico()))
             .satisfies(a ->
-                assertThat(a.getManoObra()).as("check manoObra").usingComparator(bigDecimalCompareTo).isEqualTo(expected.getManoObra())
+                assertThat(a.getValorPactado())
+                    .as("check valorPactado")
+                    .usingComparator(bigDecimalCompareTo)
+                    .isEqualTo(expected.getValorPactado())
             )
-            .satisfies(a ->
-                assertThat(a.getSubtotal()).as("check subtotal").usingComparator(bigDecimalCompareTo).isEqualTo(expected.getSubtotal())
-            )
-            .satisfies(a -> assertThat(a.getTotal()).as("check total").usingComparator(bigDecimalCompareTo).isEqualTo(expected.getTotal()));
+            .satisfies(a -> assertThat(a.getAbono()).as("check abono").usingComparator(bigDecimalCompareTo).isEqualTo(expected.getAbono()))
+            .satisfies(a -> assertThat(a.getSaldo()).as("check saldo").usingComparator(bigDecimalCompareTo).isEqualTo(expected.getSaldo()));
     }
 
     /**

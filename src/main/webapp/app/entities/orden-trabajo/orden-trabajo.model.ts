@@ -9,9 +9,10 @@ export interface IOrdenTrabajo {
   estado?: keyof typeof EstadoOrden | null;
   observaciones?: string | null;
   mecanico?: string | null;
-  manoObra?: number | null;
-  subtotal?: number | null;
-  total?: number | null;
+  valorPactado?: number | null;
+  abono?: number | null;
+  saldo?: number | null;
+  trabajosExtras?: string | null;
   vehiculo?: IVehiculo | null;
 }
 

@@ -1,0 +1,295 @@
+<div class="modal-header bg-dark text-white">
+  <h5 class="modal-title"><span>&#128438;</span> Preparar Orden de Trabajo — PDF</h5>
+  <button type="button" class="btn-close btn-close-white" (click)="cancel()"></button>
+</div>
+
+<div class="modal-body" style="max-height: 75vh; overflow-y: auto; padding: 1rem 1.25rem">
+  <!-- ── TRABAJO A REALIZAR ── -->
+  <div class="section-header">TRABAJO A REALIZAR</div>
+  <div class="check-grid">
+    <table class="check-table">
+      <thead>
+        <tr>
+          <th class="parte-col">Parte</th>
+          <th class="ep-col">E</th>
+          <th class="ep-col">P</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (parte of partesCol1; track parte) {
+          <tr>
+            <td>{{ parte }}</td>
+            <td class="center">
+              <input type="checkbox" [checked]="isEnderezado(parte)" (change)="toggleEnderezado(parte)" />
+            </td>
+            <td class="center">
+              <input type="checkbox" [checked]="isPintura(parte)" (change)="togglePintura(parte)" />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <table class="check-table">
+      <thead>
+        <tr>
+          <th class="parte-col">Parte</th>
+          <th class="ep-col">E</th>
+          <th class="ep-col">P</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (parte of partesCol2; track parte) {
+          <tr>
+            <td>{{ parte }}</td>
+            <td class="center">
+              <input type="checkbox" [checked]="isEnderezado(parte)" (change)="toggleEnderezado(parte)" />
+            </td>
+            <td class="center">
+              <input type="checkbox" [checked]="isPintura(parte)" (change)="togglePintura(parte)" />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <table class="check-table">
+      <thead>
+        <tr>
+          <th class="parte-col">Parte</th>
+          <th class="ep-col">E</th>
+          <th class="ep-col">P</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (parte of partesCol3; track parte) {
+          <tr>
+            <td>{{ parte }}</td>
+            <td class="center">
+              <input type="checkbox" [checked]="isEnderezado(parte)" (change)="toggleEnderezado(parte)" />
+            </td>
+            <td class="center">
+              <input type="checkbox" [checked]="isPintura(parte)" (change)="togglePintura(parte)" />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── INVENTARIO ── -->
+  <div class="section-header mt-3">INVENTARIO</div>
+  <div class="inv-grid">
+    <table class="check-table">
+      <tbody>
+        @for (item of inventarioCol1; track item) {
+          <tr>
+            <td>{{ item }}</td>
+            <td class="center">
+              <input type="checkbox" [checked]="isInventario(item)" (change)="toggleInventario(item)" />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <table class="check-table">
+      <tbody>
+        @for (item of inventarioCol2; track item) {
+          <tr>
+            <td>{{ item }}</td>
+            <td class="center">
+              <input type="checkbox" [checked]="isInventario(item)" (change)="toggleInventario(item)" />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <!-- Nivel de combustible -->
+    <div class="fuel-section">
+      <div class="fuel-label-row">
+        <span class="fw-bold" style="font-size: 12px">Combustible</span>
+      </div>
+      <div class="fuel-gauge">
+        <span class="fuel-e">E</span>
+        @for (seg of combustibleSegmentos; track seg) {
+          <div class="fuel-seg" [class.filled]="seg < form.nivelCombustible" (click)="setCombustible(seg)" title="{{ seg + 1 }}/8"></div>
+        }
+        <span class="fuel-f">F</span>
+      </div>
+      <div style="font-size: 11px; color: #666; margin-top: 4px">Clic en segmento para marcar nivel</div>
+    </div>
+  </div>
+
+  <!-- ── DATOS ADICIONALES ── -->
+  <div class="section-header mt-3">DATOS ADICIONALES</div>
+  <div class="row g-2 mt-1">
+    <div class="col-md-4">
+      <label class="form-label form-label-sm">Kilometraje</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="form.kilometraje" placeholder="Ej: 45000 km" />
+    </div>
+    <div class="col-md-4 d-flex align-items-end gap-3">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="grua" [(ngModel)]="form.ingresoGrua" />
+        <label class="form-check-label" for="grua">Ingresó en grúa</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VALORES ── -->
+  <div class="section-header mt-3">VALORES</div>
+  <div class="row g-2 mt-1">
+    <div class="col-md-4">
+      <label class="form-label form-label-sm">Valor pactado $</label>
+      <input
+        type="number"
+        class="form-control form-control-sm"
+        [(ngModel)]="form.valorPactado"
+        (ngModelChange)="calcularSaldo()"
+        placeholder="0.00"
+      />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label form-label-sm">Abono $</label>
+      <input
+        type="number"
+        class="form-control form-control-sm"
+        [(ngModel)]="form.abono"
+        (ngModelChange)="calcularSaldo()"
+        placeholder="0.00"
+      />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label form-label-sm">Saldo $ <span style="font-size: 10px; color: #888">(calculado)</span></label>
+      <input type="text" class="form-control form-control-sm bg-light" [value]="form.saldo" readonly />
+    </div>
+  </div>
+
+  <!-- ── TRABAJOS EXTRAS ── -->
+  <div class="section-header mt-3">TRABAJOS EXTRAS</div>
+  <div class="mt-1">
+    <textarea
+      class="form-control form-control-sm"
+      rows="3"
+      [(ngModel)]="form.trabajosExtras"
+      placeholder="Describa trabajos adicionales..."
+    ></textarea>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary btn-sm" (click)="cancel()">Cancelar</button>
+  <button type="button" class="btn btn-success btn-sm" (click)="generarPdf()" [disabled]="generando">
+    @if (generando) {
+      <span class="spinner-border spinner-border-sm me-1"></span> Generando...
+    } @else {
+      &#128438; Generar PDF
+    }
+  </button>
+</div>
+
+<style>
+  .section-header {
+    background: #1a3a5c;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 3px;
+    margin-bottom: 6px;
+  }
+
+  .check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .inv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 8px;
+    align-items: start;
+  }
+
+  .check-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .check-table th {
+    background: #e8eef5;
+    color: #1a3a5c;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 3px 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+
+  .check-table td {
+    padding: 2px 5px;
+    border: 1px solid #eee;
+    vertical-align: middle;
+  }
+
+  .check-table .parte-col {
+    width: 70%;
+  }
+  .check-table .ep-col {
+    width: 15%;
+    text-align: center;
+  }
+  .center {
+    text-align: center;
+  }
+
+  /* Combustible */
+  .fuel-section {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 160px;
+  }
+
+  .fuel-gauge {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 6px;
+  }
+
+  .fuel-e,
+  .fuel-f {
+    font-weight: bold;
+    font-size: 13px;
+  }
+  .fuel-e {
+    color: #c0392b;
+  }
+  .fuel-f {
+    color: #27ae60;
+  }
+
+  .fuel-seg {
+    width: 16px;
+    height: 28px;
+    border: 1px solid #999;
+    border-radius: 2px;
+    background: #f0f0f0;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .fuel-seg.filled {
+    background: #27ae60;
+    border-color: #1e8449;
+  }
+
+  .fuel-seg:hover {
+    background: #a9dfbf;
+  }
+</style>

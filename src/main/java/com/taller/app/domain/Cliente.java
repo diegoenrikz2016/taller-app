@@ -34,6 +34,9 @@ public class Cliente implements Serializable {
     @Column(name = "direccion")
     private String direccion;
 
+    @Column(name = "email")
+    private String email;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -99,6 +102,19 @@ public class Cliente implements Serializable {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public Cliente email(String email) {
+        this.setEmail(email);
+        return this;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

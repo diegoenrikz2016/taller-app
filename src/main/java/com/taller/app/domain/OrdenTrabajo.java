@@ -42,14 +42,17 @@ public class OrdenTrabajo implements Serializable {
     @Column(name = "mecanico")
     private String mecanico;
 
-    @Column(name = "mano_obra", precision = 21, scale = 2)
-    private BigDecimal manoObra;
+    @Column(name = "valor_pactado", precision = 21, scale = 2)
+    private BigDecimal valorPactado;
 
-    @Column(name = "subtotal", precision = 21, scale = 2)
-    private BigDecimal subtotal;
+    @Column(name = "abono", precision = 21, scale = 2)
+    private BigDecimal abono;
 
-    @Column(name = "total", precision = 21, scale = 2)
-    private BigDecimal total;
+    @Column(name = "saldo", precision = 21, scale = 2)
+    private BigDecimal saldo;
+
+    @Column(name = "trabajos_extras", length = 1000)
+    private String trabajosExtras;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ordenTrabajo")
     @JsonIgnoreProperties(value = { "ordenTrabajo" }, allowSetters = true)
@@ -126,43 +129,51 @@ public class OrdenTrabajo implements Serializable {
         this.mecanico = mecanico;
     }
 
-    public BigDecimal getManoObra() {
-        return this.manoObra;
+    public BigDecimal getValorPactado() {
+        return this.valorPactado;
     }
 
-    public OrdenTrabajo manoObra(BigDecimal manoObra) {
-        this.setManoObra(manoObra);
+    public void setValorPactado(BigDecimal valorPactado) {
+        this.valorPactado = valorPactado;
+    }
+
+    public OrdenTrabajo valorPactado(BigDecimal valorPactado) {
+        this.setValorPactado(valorPactado);
         return this;
     }
 
-    public void setManoObra(BigDecimal manoObra) {
-        this.manoObra = manoObra;
+    public BigDecimal getAbono() {
+        return this.abono;
     }
 
-    public BigDecimal getSubtotal() {
-        return this.subtotal;
+    public void setAbono(BigDecimal abono) {
+        this.abono = abono;
     }
 
-    public OrdenTrabajo subtotal(BigDecimal subtotal) {
-        this.setSubtotal(subtotal);
+    public OrdenTrabajo abono(BigDecimal abono) {
+        this.setAbono(abono);
         return this;
     }
 
-    public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
+    public BigDecimal getSaldo() {
+        return this.saldo;
     }
 
-    public BigDecimal getTotal() {
-        return this.total;
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
     }
 
-    public OrdenTrabajo total(BigDecimal total) {
-        this.setTotal(total);
+    public OrdenTrabajo saldo(BigDecimal saldo) {
+        this.setSaldo(saldo);
         return this;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
+    public String getTrabajosExtras() {
+        return this.trabajosExtras;
+    }
+
+    public void setTrabajosExtras(String trabajosExtras) {
+        this.trabajosExtras = trabajosExtras;
     }
 
     public Set<DetalleOrden> getDetalleses() {
@@ -237,9 +248,9 @@ public class OrdenTrabajo implements Serializable {
             ", estado='" + getEstado() + "'" +
             ", observaciones='" + getObservaciones() + "'" +
             ", mecanico='" + getMecanico() + "'" +
-            ", manoObra=" + getManoObra() +
-            ", subtotal=" + getSubtotal() +
-            ", total=" + getTotal() +
+            ", valorPactado=" + getValorPactado() +
+            ", abono=" + getAbono() +
+            ", saldo=" + getSaldo() +
             "}";
     }
 }

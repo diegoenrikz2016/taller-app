@@ -1,216 +1,505 @@
+<!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
       body {
         font-family: Arial, sans-serif;
-        font-size: 12px;
+        font-size: 11px;
+        color: #111;
+        background: #fff;
       }
-
-      .container {
+      .page {
         width: 100%;
-        padding: 10px;
+        padding: 14px 18px;
       }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+      .hdr {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 6px;
       }
-
-      .title {
-        text-align: center;
-        font-size: 20px;
+      .hdr td {
+        vertical-align: middle;
+      }
+      .logo-box {
+        width: 72px;
+        height: 56px;
+        border: 2px solid #1a3a5c;
+        border-radius: 4px;
+        background: #1a3a5c;
+        color: #fff;
+        font-size: 11px;
         font-weight: bold;
+        text-align: center;
+        padding-top: 14px;
       }
-
-      .logo {
-        width: 80px;
+      .title-cell {
+        text-align: center;
       }
-
-      .section {
-        margin-top: 10px;
-        border: 1px solid #000;
-        padding: 5px;
+      .title-cell h1 {
+        font-size: 18px;
+        font-weight: bold;
+        color: #1a3a5c;
+        letter-spacing: 2px;
+        text-transform: uppercase;
       }
-
-      .row {
-        display: flex;
-        justify-content: space-between;
+      .title-cell p {
+        font-size: 9px;
+        color: #555;
+        margin-top: 1px;
       }
-
-      .col {
-        width: 48%;
+      .mgr-cell {
+        text-align: right;
+        font-size: 10px;
+        line-height: 1.5;
       }
-
-      table {
+      .mgr-cell .orden-num {
+        color: #c0392b;
+        font-weight: bold;
+        font-size: 13px;
+      }
+      .divider {
+        border: none;
+        border-top: 2px solid #1a3a5c;
+        margin: 5px 0 8px;
+      }
+      .datos-outer {
+        border: 1px solid #999;
+        margin-bottom: 7px;
+      }
+      .datos-table {
         width: 100%;
         border-collapse: collapse;
       }
-
-      td,
-      th {
-        border: 1px solid black;
-        padding: 4px;
-        text-align: left;
+      .datos-table td {
+        padding: 3px 6px;
+        border: 1px solid #ddd;
+        font-size: 10px;
+        vertical-align: middle;
       }
-
-      .center {
+      .lbl {
+        font-weight: bold;
+        color: #1a3a5c;
+      }
+      .val {
+        color: #111;
+      }
+      .sec-title {
+        background: #1a3a5c;
+        color: #fff;
+        font-size: 9px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 3px 6px;
         text-align: center;
       }
-
-      .checkbox {
+      .check-outer {
+        border: 1px solid #999;
+        border-top: none;
+        margin-bottom: 7px;
+      }
+      .check-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .check-table th {
+        background: #e8eef5;
+        color: #1a3a5c;
+        font-size: 9px;
+        font-weight: bold;
+        padding: 2px 4px;
+        border: 1px solid #ccc;
+        text-align: center;
+      }
+      .check-table td {
+        padding: 2px 4px;
+        border: 1px solid #eee;
+        font-size: 10px;
+        vertical-align: middle;
+      }
+      .chk {
+        text-align: center;
+        width: 18px;
+      }
+      .chk-box {
+        display: inline-block;
+        width: 11px;
+        height: 11px;
+        border: 1px solid #555;
+        text-align: center;
+        line-height: 11px;
+        font-size: 9px;
+        font-weight: bold;
+      }
+      .col-wrap {
+        display: table;
+        width: 100%;
+      }
+      .col-cell {
+        display: table-cell;
+        vertical-align: top;
+        width: 33.3%;
+        padding: 0 2px;
+      }
+      .inv-wrap {
+        display: table;
+        width: 100%;
+      }
+      .inv-left {
+        display: table-cell;
+        width: 40%;
+        vertical-align: top;
+      }
+      .inv-right {
+        display: table-cell;
+        width: 40%;
+        vertical-align: top;
+        padding-left: 6px;
+      }
+      .inv-fuel {
+        display: table-cell;
+        width: 20%;
+        vertical-align: middle;
+        text-align: center;
+        padding-left: 8px;
+      }
+      .fuel-gauge {
+        display: table;
+        margin: 0 auto;
+      }
+      .fuel-seg {
         width: 12px;
-        height: 12px;
-        border: 1px solid black;
+        height: 22px;
+        border: 1px solid #999;
+        background: #f0f0f0;
         display: inline-block;
       }
-
-      .firma {
-        margin-top: 40px;
-        display: flex;
-        justify-content: space-between;
+      .fuel-seg.filled {
+        background: #27ae60;
+        border-color: #1e8449;
       }
-
-      .linea {
-        border-top: 1px solid black;
-        width: 200px;
+      .fuel-e {
+        color: #c0392b;
+        font-weight: bold;
+        font-size: 12px;
+        padding-right: 3px;
+      }
+      .fuel-f {
+        color: #27ae60;
+        font-weight: bold;
+        font-size: 12px;
+        padding-left: 3px;
+      }
+      .svc-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .svc-table th {
+        background: #e8eef5;
+        color: #1a3a5c;
+        font-size: 9px;
+        font-weight: bold;
+        padding: 3px 5px;
+        border: 1px solid #ccc;
+        text-align: left;
+      }
+      .svc-table th.right,
+      .svc-table td.right {
+        text-align: right;
+      }
+      .svc-table td {
+        padding: 3px 5px;
+        border: 1px solid #eee;
+        font-size: 10px;
+      }
+      .svc-table tr:nth-child(even) td {
+        background: #f9fbfd;
+      }
+      .totals-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 2px;
+      }
+      .totals-table td {
+        padding: 2px 5px;
+        font-size: 10px;
+      }
+      .tot-lbl {
+        text-align: right;
+        color: #555;
+        width: 75%;
+      }
+      .tot-val {
+        text-align: right;
+        font-weight: bold;
+        width: 25%;
+        border-left: 1px solid #ccc;
+      }
+      .total-row td {
+        background: #1a3a5c;
+        color: #fff;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .valores-wrap {
+        display: table;
+        width: 100%;
+        margin-bottom: 7px;
+      }
+      .valores-left {
+        display: table-cell;
+        width: 40%;
+        vertical-align: top;
+      }
+      .valores-right {
+        display: table-cell;
+        width: 60%;
+        vertical-align: top;
+        padding-left: 10px;
+      }
+      .val-row {
+        margin-bottom: 4px;
+        font-size: 10px;
+      }
+      .val-row .val-lbl {
+        font-weight: bold;
+        color: #1a3a5c;
+      }
+      .val-box {
+        display: inline-block;
+        border: 1px solid #555;
+        min-width: 100px;
+        padding: 1px 4px;
+        font-size: 10px;
+        background: #fff;
+      }
+      .extras-box {
+        border: 1px solid #555;
+        min-height: 50px;
+        padding: 4px;
+        font-size: 10px;
+        background: #fff;
+      }
+      .firma-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      .firma-table td {
         text-align: center;
+        padding: 0 20px;
+        vertical-align: bottom;
+      }
+      .firma-line {
+        border-top: 1px solid #333;
+        padding-top: 3px;
+        font-size: 9px;
+        font-weight: bold;
+        color: #1a3a5c;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .disclaimer {
+        font-size: 8px;
+        color: #555;
+        text-align: center;
+        margin-top: 8px;
+        font-style: italic;
+      }
+      .footer {
+        margin-top: 8px;
+        border-top: 1px solid #ccc;
+        padding-top: 4px;
+        text-align: center;
+        font-size: 8px;
+        color: #999;
       }
     </style>
   </head>
-
   <body>
-    <div class="container">
+    <div class="page">
       <!-- HEADER -->
-      <div class="header">
-        <div>
-          <img class="logo" src="https://via.placeholder.com/80" />
-        </div>
-
-        <div class="title">ORDEN DE TRABAJO</div>
-
-        <div>
-          <b># {{ orden }}</b>
-        </div>
-      </div>
-
-      <!-- DATOS -->
-      <div class="section">
-        <div class="row">
-          <div class="col">
-            <b>Ingreso:</b> {{ fecha }} <br />
-            <b>Cliente:</b> {{ cliente }} <br />
-            <b>Vehículo:</b> {{ vehiculo }} <br />
-          </div>
-
-          <div class="col">
-            <b>Teléfono:</b> {{ telefono }} <br />
-            <b>Email:</b> {{ email }} <br />
-          </div>
-        </div>
+      <table class="hdr">
+        <tr>
+          <td style="width: 80px"><div class="logo-box">NOMBRE TALLER</div></td>
+          <td class="title-cell">
+            <h1>Orden de Trabajo</h1>
+            <p>Taller Mecánico Nombre</p>
+          </td>
+          <td class="mgr-cell" style="width: 160px">
+            <div>Craftify Portal</div>
+            <div>Gerente General</div>
+            <div>0999999999</div>
+            <div class="orden-num">{{ ordenPadded }}</div>
+          </td>
+        </tr>
+      </table>
+      <hr class="divider" />
+      <div class="sec-title">DATOS DEL CLIENTE</div>
+      <!-- DATOS VEHÍCULO + CLIENTE -->
+      <div class="datos-outer">
+        <table class="datos-table">
+          <tr>
+            <td style="width: 12%"><span class="lbl">Marca:</span></td>
+            <td style="width: 18%">
+              <span class="val">{{ marca }}</span>
+            </td>
+            <td style="width: 12%"><span class="lbl">Ingreso:</span></td>
+            <td style="width: 18%">
+              <span class="val">{{ fecha }}</span>
+            </td>
+            <td style="width: 12%"><span class="lbl">Nombre:</span></td>
+            <td>
+              <span class="val">{{ cliente }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="lbl">Modelo:</span></td>
+            <td>
+              <span class="val">{{ modelo }}</span>
+            </td>
+            <td><span class="lbl">Salida:</span></td>
+            <td><span class="val"></span></td>
+            <td><span class="lbl">Teléfono:</span></td>
+            <td>
+              <span class="val">{{ telefonoCliente }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="lbl">Color:</span></td>
+            <td>
+              <span class="val">{{ color }}</span>
+            </td>
+            <td><span class="lbl">Placa:</span></td>
+            <td>
+              <span class="val">{{ vehiculo }}</span>
+            </td>
+            <td><span class="lbl">Email:</span></td>
+            <td>
+              <span class="val">{{ email }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="lbl">Kilometraje:</span></td>
+            <td>
+              <span class="val">{{ kilometraje }}</span>
+            </td>
+            <td colspan="2"></td>
+            <td><span class="lbl">Cédula / RUC:</span></td>
+            <td>
+              <span class="val">{{ cedula }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="lbl">Dirección:</span></td>
+            <td colspan="5">
+              <span class="val">{{ direccion }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="lbl">Ingreso grúa:</span></td>
+            <td>
+              <span class="chk-box">{{ grua }}</span> Sí&#160;&#160;<span class="chk-box">{{ noGrua }}</span> No
+            </td>
+            <td><span class="lbl">Mecánico:</span></td>
+            <td colspan="3">
+              <span class="val">{{ mecanico }}</span>
+            </td>
+          </tr>
+        </table>
       </div>
 
       <!-- TRABAJO A REALIZAR -->
-      <div class="section">
-        <b>TRABAJO A REALIZAR</b>
-
-        <table>
-          <tr>
-            <th>Parte</th>
-            <th>E</th>
-            <th>P</th>
-          </tr>
-
-          <tr>
-            <td>Guardachoque D</td>
-            <td class="center"><div class="checkbox"></div></td>
-            <td class="center"><div class="checkbox"></div></td>
-          </tr>
-          <tr>
-            <td>Capó</td>
-            <td class="center"><div class="checkbox"></div></td>
-            <td class="center"><div class="checkbox"></div></td>
-          </tr>
-          <tr>
-            <td>Techo</td>
-            <td class="center"><div class="checkbox"></div></td>
-            <td class="center"><div class="checkbox"></div></td>
-          </tr>
-          <tr>
-            <td>Puerta</td>
-            <td class="center"><div class="checkbox"></div></td>
-            <td class="center"><div class="checkbox"></div></td>
-          </tr>
-        </table>
-      </div>
+      <div class="sec-title">TRABAJO A REALIZAR</div>
+      <div class="check-outer">{{ trabajosHtml }}</div>
 
       <!-- INVENTARIO -->
-      <div class="section">
-        <b>INVENTARIO</b>
+      <div class="sec-title">INVENTARIO</div>
+      <div class="check-outer" style="padding: 5px">
+        <div class="inv-wrap">
+          <div class="inv-left">{{ inventarioHtml_col1 }}</div>
+          <div class="inv-right">{{ inventarioHtml_col2 }}</div>
+          <div class="inv-fuel">
+            <div style="font-size: 9px; font-weight: bold; margin-bottom: 4px">Combustible</div>
+            {{ combustibleHtml }}
+          </div>
+        </div>
+      </div>
 
-        <table>
+      <!-- DAÑOS PREEXISTENTES -->
+      <div class="sec-title">DAÑOS PREEXISTENTES DEL VEHÍCULO</div>
+      <div class="check-outer" style="padding: 8px 6px">
+        <table style="width: 100%; border-collapse: collapse">
           <tr>
-            <td>Gato</td>
-            <td><div class="checkbox"></div></td>
-          </tr>
-          <tr>
-            <td>Herramientas</td>
-            <td><div class="checkbox"></div></td>
-          </tr>
-          <tr>
-            <td>Triángulos</td>
-            <td><div class="checkbox"></div></td>
-          </tr>
-          <tr>
-            <td>Radio</td>
-            <td><div class="checkbox"></div></td>
+            <!-- LADO DERECHO -->
+            <td style="width: 25%; text-align: center; vertical-align: middle; padding: 2px 4px">
+              <div style="font-size: 9px; font-weight: bold; color: #1a3a5c; margin-bottom: 4px">Lado Derecho</div>
+              <img src="images/car-side-right.png" width="155" height="62" style="display: block; margin: 0 auto" />
+            </td>
+            <!-- FRENTE -->
+            <td style="width: 25%; text-align: center; vertical-align: middle; padding: 2px 4px">
+              <div style="font-size: 9px; font-weight: bold; color: #1a3a5c; margin-bottom: 4px">Frente</div>
+              <img src="images/car-front.png" width="88" height="72" style="display: block; margin: 0 auto" />
+            </td>
+            <!-- DETRÁS -->
+            <td style="width: 25%; text-align: center; vertical-align: middle; padding: 2px 4px">
+              <div style="font-size: 9px; font-weight: bold; color: #1a3a5c; margin-bottom: 4px">Detrás</div>
+              <img src="images/car-rear.png" width="88" height="72" style="display: block; margin: 0 auto" />
+            </td>
+            <!-- LADO IZQUIERDO -->
+            <td style="width: 25%; text-align: center; vertical-align: middle; padding: 2px 4px">
+              <div style="font-size: 9px; font-weight: bold; color: #1a3a5c; margin-bottom: 4px">Lado Izquierdo</div>
+              <img src="images/car-side-left.png" width="155" height="62" style="display: block; margin: 0 auto" />
+            </td>
           </tr>
         </table>
       </div>
 
-      <!-- DETALLE -->
-      <div class="section">
-        <b>SERVICIOS</b>
-
-        <table>
-          <tr>
-            <th>Servicio</th>
-            <th>Precio</th>
-          </tr>
-
-          {{
-            detalle
-          }}
-        </table>
-
-        <div style="text-align: right; margin-top: 10px">
-          <b>TOTAL: {{ total }}</b>
+      <!-- VALORES + EXTRAS -->
+      <div class="valores-wrap">
+        <div class="valores-left">
+          <div class="val-row">
+            <span class="val-lbl">Valor pactado $</span> <span class="val-box">{{ valorPactado }}</span>
+          </div>
+          <div class="val-row">
+            <span class="val-lbl">Abono $</span> <span class="val-box">{{ abono }}</span>
+          </div>
+          <div class="val-row">
+            <span class="val-lbl">Saldo $</span> <span class="val-box">{{ saldo }}</span>
+          </div>
+        </div>
+        <div class="valores-right">
+          <div style="font-size: 9px; font-weight: bold; color: #1a3a5c; margin-bottom: 3px">Trabajos extras:</div>
+          <div class="extras-box">{{ trabajosExtras }}</div>
         </div>
       </div>
 
-      <!-- VALORES -->
-      <div class="section">
-        <div class="row">
-          <div>
-            Valor pactado: __________ <br />
-            Abono: __________ <br />
-            Saldo: __________
-          </div>
-
-          <div>
-            Trabajos extras:<br />
-            ___________________________<br />
-            ___________________________
-          </div>
-        </div>
+      <!-- DISCLAIMER -->
+      <div class="disclaimer">
+        Una vez revisado y recibido el vehículo no se responsabiliza el taller por hundidas o rayones fuera del mismo.
       </div>
 
       <!-- FIRMAS -->
-      <div class="firma">
-        <div class="linea">TALLER</div>
-        <div class="linea">CLIENTE</div>
-      </div>
+      <table class="firma-table">
+        <tr>
+          <td>
+            <div style="height: 30px"></div>
+            <div class="firma-line">Firma del Taller</div>
+          </td>
+          <td>
+            <div style="height: 30px"></div>
+            <div class="firma-line">Firma del Cliente</div>
+          </td>
+        </tr>
+      </table>
+
+      <div class="footer">Generado el {{ fechaGeneracion }} — Orden N° {{ orden }}</div>
     </div>
   </body>
 </html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260504000004-1" author="taller">
+        <!-- Copiar datos de mano_obra → valor_pactado si valor_pactado está vacío -->
+        <sql>UPDATE orden_trabajo SET valor_pactado = mano_obra WHERE valor_pactado IS NULL AND mano_obra IS NOT NULL</sql>
+        <sql>UPDATE orden_trabajo SET abono = subtotal WHERE abono IS NULL AND subtotal IS NOT NULL</sql>
+        <sql>UPDATE orden_trabajo SET saldo = (COALESCE(valor_pactado,0) - COALESCE(abono,0)) WHERE saldo IS NULL</sql>
+
+        <!-- Eliminar columnas obsoletas -->
+        <dropColumn tableName="orden_trabajo" columnName="mano_obra"/>
+        <dropColumn tableName="orden_trabajo" columnName="subtotal"/>
+        <dropColumn tableName="orden_trabajo" columnName="total"/>
+    </changeSet>
+
+</databaseChangeLog>

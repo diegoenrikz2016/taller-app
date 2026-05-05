@@ -1,0 +1,61 @@
+<div class="container-fluid mt-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 style="color: #1a3a5c; font-weight: bold">
+      <fa-icon icon="file-pdf" class="me-2" />
+      Historial de Órdenes PDF Generadas
+    </h4>
+    <div>
+      <button class="btn btn-info btn-sm me-2" (click)="cargar()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" /> Actualizar
+      </button>
+      <a class="btn btn-secondary btn-sm" routerLink="/orden-trabajo"> <fa-icon icon="arrow-left" /> Volver </a>
+    </div>
+  </div>
+
+  @if (errorMsg()) {
+    <div class="alert alert-danger">{{ errorMsg() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="text-center py-4">
+      <div class="spinner-border text-primary"></div>
+      <p class="mt-2 text-muted">Cargando PDFs...</p>
+    </div>
+  } @else if (pdfs().length === 0) {
+    <div class="alert alert-info">No hay PDFs generados aún. Genera una orden desde la lista de Orden Trabajos.</div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Archivo</th>
+            <th>Orden N°</th>
+            <th>Fecha Generación</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (pdf of pdfs(); track pdf.id) {
+            <tr>
+              <td>{{ pdf.id }}</td>
+              <td>
+                <fa-icon icon="file-pdf" style="color: #c0392b" class="me-1" />
+                {{ pdf.nombreArchivo }}
+              </td>
+              <td>
+                <a [routerLink]="['/orden-trabajo', pdf.ordenTrabajoId, 'view']">
+                  {{ pdf.ordenTrabajoId }}
+                </a>
+              </td>
+              <td>{{ pdf.fechaGeneracion | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                <button class="btn btn-success btn-sm" (click)="descargar(pdf)"><fa-icon icon="download" /> Descargar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

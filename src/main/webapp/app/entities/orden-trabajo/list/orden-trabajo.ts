@@ -18,9 +18,9 @@ import { TranslateDirective } from 'app/shared/language';
 import { ItemCount } from 'app/shared/pagination';
 import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
 import { OrdenTrabajoDeleteDialog } from '../delete/orden-trabajo-delete-dialog';
+import { OrdenTrabajoPdfDialog } from '../pdf/orden-trabajo-pdf-dialog';
 import { IOrdenTrabajo } from '../orden-trabajo.model';
 import { OrdenTrabajoService } from '../service/orden-trabajo.service';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'jhi-orden-trabajo',
@@ -57,7 +57,6 @@ export class OrdenTrabajo implements OnInit {
   protected readonly activatedRoute = inject(ActivatedRoute);
   protected readonly sortService = inject(SortService);
   protected modalService = inject(NgbModal);
-  protected http = inject(HttpClient);
 
   constructor() {
     effect(() => {
@@ -143,16 +142,9 @@ export class OrdenTrabajo implements OnInit {
     });
   }
 
-  descargarPdf(id: number): void {
-    this.http
-      .get(`api/orden-trabajos/${id}/pdf`, {
-        responseType: 'blob',
-      })
-      .subscribe(res => {
-        const file = new Blob([res], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(file);
-
-        window.open(url);
-      });
+  descargarPdf(ordenTrabajo: IOrdenTrabajo): void {
+    const modalRef = this.modalService.open(OrdenTrabajoPdfDialog, { size: 'xl', backdrop: 'static' });
+    modalRef.componentInstance.ordenId = ordenTrabajo.id;
+    modalRef.componentInstance.orden = ordenTrabajo;
   }
 }

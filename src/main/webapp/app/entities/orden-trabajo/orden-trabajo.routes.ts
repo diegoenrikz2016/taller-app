@@ -15,16 +15,21 @@ const ordenTrabajoRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: ':id/view',
-    loadComponent: () => import('./detail/orden-trabajo-detail').then(m => m.OrdenTrabajoDetail),
+    path: 'pdfs',
+    loadComponent: () => import('./pdf/orden-trabajo-pdf-historial').then(m => m.OrdenTrabajoPdfHistorial),
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'new',
+    loadComponent: () => import('./update/orden-trabajo-update').then(m => m.OrdenTrabajoUpdate),
     resolve: {
       ordenTrabajo: OrdenTrabajoResolve,
     },
     canActivate: [UserRouteAccessService],
   },
   {
-    path: 'new',
-    loadComponent: () => import('./update/orden-trabajo-update').then(m => m.OrdenTrabajoUpdate),
+    path: ':id/view',
+    loadComponent: () => import('./detail/orden-trabajo-detail').then(m => m.OrdenTrabajoDetail),
     resolve: {
       ordenTrabajo: OrdenTrabajoResolve,
     },

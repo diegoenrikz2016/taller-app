@@ -136,4 +136,10 @@ export class OrdenTrabajoUpdate implements OnInit {
   displayVehiculo(vehiculo: IVehiculo): string {
     return vehiculo ? `${vehiculo.marca} ${vehiculo.modelo} ${vehiculo.placa}` : '';
   }
+
+  calcularSaldo(): void {
+    const vp = parseFloat(String(this.editForm.get('valorPactado')?.value ?? 0)) || 0;
+    const ab = parseFloat(String(this.editForm.get('abono')?.value ?? 0)) || 0;
+    this.editForm.get('saldo')?.setValue(parseFloat((vp - ab).toFixed(2)));
+  }
 }

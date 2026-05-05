@@ -80,18 +80,36 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_manoObra" jhiTranslate="tallerApp.ordenTrabajo.manoObra">Mano Obra</label>
-          <input type="number" class="form-control" name="manoObra" id="field_manoObra" data-cy="manoObra" formControlName="manoObra" />
+          <label class="form-label" for="field_valorPactado">Valor Pactado $</label>
+          <input
+            type="number"
+            class="form-control"
+            name="valorPactado"
+            id="field_valorPactado"
+            formControlName="valorPactado"
+            (input)="calcularSaldo()"
+          />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_subtotal" jhiTranslate="tallerApp.ordenTrabajo.subtotal">Subtotal</label>
-          <input type="number" class="form-control" name="subtotal" id="field_subtotal" data-cy="subtotal" formControlName="subtotal" />
+          <label class="form-label" for="field_abono">Abono $</label>
+          <input type="number" class="form-control" name="abono" id="field_abono" formControlName="abono" (input)="calcularSaldo()" />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_total" jhiTranslate="tallerApp.ordenTrabajo.total">Total</label>
-          <input type="number" class="form-control" name="total" id="field_total" data-cy="total" formControlName="total" />
+          <label class="form-label" for="field_saldo">Saldo $ <small class="text-muted">(calculado)</small></label>
+          <input type="number" class="form-control bg-light" name="saldo" id="field_saldo" formControlName="saldo" readonly />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_trabajosExtras">Trabajos Extras</label>
+          <textarea
+            class="form-control"
+            name="trabajosExtras"
+            id="field_trabajosExtras"
+            formControlName="trabajosExtras"
+            rows="3"
+          ></textarea>
         </div>
 
         <!--div class="mb-3">

@@ -21,6 +21,8 @@ public class ClienteDTO implements Serializable {
 
     private String direccion;
 
+    private String email;
+
     public Long getId() {
         return id;
     }
@@ -59,6 +61,14 @@ public class ClienteDTO implements Serializable {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

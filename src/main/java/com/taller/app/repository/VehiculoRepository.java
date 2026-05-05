@@ -11,9 +11,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface VehiculoRepository extends JpaRepository<Vehiculo, Long> {
-    List<Vehiculo> findByPlacaContainingIgnoreCaseOrMarcaContainingIgnoreCaseOrModeloContainingIgnoreCase(
-        String placa,
-        String marca,
-        String modelo
-    );
+    List<Vehiculo> findByPlacaContainingIgnoreCase(String placa);
 }
