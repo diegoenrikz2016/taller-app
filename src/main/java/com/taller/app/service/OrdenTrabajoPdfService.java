@@ -7,14 +7,15 @@ import com.taller.app.domain.OrdenTrabajoPdf;
 import com.taller.app.domain.Vehiculo;
 import com.taller.app.repository.OrdenTrabajoPdfRepository;
 import com.taller.app.service.dto.OrdenTrabajoPdfRequestDTO;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.regex.Pattern;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -69,10 +70,12 @@ public class OrdenTrabajoPdfService {
 
     public byte[] generarPdf(OrdenTrabajo orden, OrdenTrabajoPdfRequestDTO req) {
         try {
-            String html = new String(
-                Files.readAllBytes(Paths.get("src/main/resources/templates/orden-trabajo.html")),
-                StandardCharsets.UTF_8
-            );
+            String html;
+            try (InputStream tplStream = new ClassPathResource("templates/orden-trabajo.html").getInputStream()) {
+                html = new String(tplStream.readAllBytes(), StandardCharsets.UTF_8);
+            }
+            // Normalize {{ key }} → {{key}} so template works regardless of whitespace style
+            html = Pattern.compile("\\{\\{\\s+([^}]+?)\\s+\\}\\}").matcher(html).replaceAll("{{$1}}");
 
             Vehiculo vehiculo = orden.getVehiculo();
             Cliente cliente = vehiculo != null ? vehiculo.getCliente() : null;

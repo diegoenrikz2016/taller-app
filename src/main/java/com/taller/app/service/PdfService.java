@@ -25,6 +25,14 @@ public class PdfService {
 
     public byte[] generarPdf(String html) {
         try {
+            // Strip UTF-8 BOM if present — openhtmltopdf's XML parser rejects it
+            if (html.startsWith("\uFEFF")) {
+                html = html.substring(1);
+            }
+            // Normalize doctype to uppercase for strict XML parser
+            if (html.startsWith("<!doctype")) {
+                html = "<!DOCTYPE" + html.substring("<!doctype".length());
+            }
             long t0 = System.currentTimeMillis();
             html = embedAllImages(html);
             long t1 = System.currentTimeMillis();
